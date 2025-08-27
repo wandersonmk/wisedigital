@@ -33,6 +33,6 @@ onMounted(async () => {
     />
     
     <!-- Página de Cardápio quando carregado -->
-    <CardapioOverview v-else />
+    <CardapioManager v-else />
   </div>
 </template>
