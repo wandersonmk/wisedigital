@@ -126,7 +126,6 @@
       :isOpen="isModalOpen"
       :pedido="selectedPedido"
       @close="closeModal"
-      @print="printOrder"
       @update-status="updateOrderStatus"
     />
   </div>
@@ -281,56 +280,218 @@ const updateOrderStatus = (pedidoId: string, newStatus: string) => {
 }
 
 const printOrder = (pedido: Pedido) => {
-  // Implementar impressão térmica
-  console.log(`Imprimindo pedido ${pedido.numero}`)
+  // Criar janela de impressão
+  const printWindow = window.open('', '_blank', 'width=300,height=600')
   
-  // Aqui você implementaria a lógica de impressão térmica
-  // Exemplo de formatação para impressora térmica 80mm
-  const printContent = formatForThermalPrint(pedido)
+  if (!printWindow) {
+    alert('Por favor, permita pop-ups para imprimir o pedido')
+    return
+  }
+
+  // HTML formatado para impressora térmica 80mm
+  const printContent = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="UTF-8">
+      <title>Pedido #${pedido.numero}</title>
+      <style>
+        @media print {
+          @page {
+            size: 80mm auto;
+            margin: 0;
+          }
+        }
+        
+        body {
+          font-family: 'Courier New', monospace;
+          font-size: 12px;
+          line-height: 1.2;
+          margin: 0;
+          padding: 8px;
+          width: 72mm;
+          color: #000;
+          background: #fff;
+        }
+        
+        .header {
+          text-align: center;
+          border-bottom: 1px dashed #000;
+          padding-bottom: 8px;
+          margin-bottom: 8px;
+        }
+        
+        .restaurant-name {
+          font-size: 16px;
+          font-weight: bold;
+          margin-bottom: 4px;
+        }
+        
+        .separator {
+          border-bottom: 1px dashed #000;
+          margin: 8px 0;
+        }
+        
+        .section {
+          margin-bottom: 8px;
+        }
+        
+        .section-title {
+          font-weight: bold;
+          margin-bottom: 4px;
+        }
+        
+        .item-line {
+          display: flex;
+          justify-content: space-between;
+          margin-bottom: 2px;
+        }
+        
+        .item-name {
+          flex: 1;
+        }
+        
+        .item-price {
+          text-align: right;
+          min-width: 60px;
+        }
+        
+        .total-line {
+          font-weight: bold;
+          font-size: 14px;
+          border-top: 1px solid #000;
+          padding-top: 4px;
+          margin-top: 8px;
+        }
+        
+        .footer {
+          text-align: center;
+          margin-top: 16px;
+          border-top: 1px dashed #000;
+          padding-top: 8px;
+        }
+        
+        .obs {
+          background: #f5f5f5;
+          padding: 4px;
+          margin: 4px 0;
+          border-left: 2px solid #666;
+        }
+        
+        @media screen {
+          body {
+            max-width: 300px;
+            margin: 20px auto;
+            border: 1px solid #ccc;
+          }
+        }
+      </style>
+    </head>
+    <body>
+      <div class="header">
+        <div class="restaurant-name">AGZAP DELIVERY</div>
+        <div>Tel: (11) 99999-9999</div>
+      </div>
+      
+      <div class="section">
+        <div style="display: flex; justify-content: space-between;">
+          <span><strong>Pedido:</strong> #${pedido.numero}</span>
+          <span><strong>Data:</strong> ${formatDateTime(pedido.dataHora)}</span>
+        </div>
+      </div>
+      
+      <div class="separator"></div>
+      
+      <div class="section">
+        <div class="section-title">CLIENTE:</div>
+        <div>${pedido.cliente}</div>
+        <div>${pedido.telefone}</div>
+        ${pedido.endereco ? `<div>${pedido.endereco}</div>` : '<div><strong>RETIRADA NO BALCÃO</strong></div>'}
+      </div>
+      
+      <div class="separator"></div>
+      
+      <div class="section">
+        <div class="section-title">ITENS:</div>
+        ${pedido.items.map(item => `
+          <div class="item-line">
+            <span class="item-name">${item.quantidade}x ${item.nome}</span>
+            <span class="item-price">R$ ${(item.quantidade * item.preco).toFixed(2)}</span>
+          </div>
+          ${item.observacao ? `<div class="obs">Obs: ${item.observacao}</div>` : ''}
+        `).join('')}
+      </div>
+      
+      <div class="separator"></div>
+      
+      <div class="section">
+        <div class="item-line total-line">
+          <span>TOTAL:</span>
+          <span>R$ ${pedido.total.toFixed(2)}</span>
+        </div>
+      </div>
+      
+      <div class="section">
+        <div><strong>Pagamento:</strong> ${getPaymentLabel(pedido.formaPagamento).toUpperCase()}</div>
+        <div><strong>Tipo:</strong> ${pedido.tipoEntrega === 'entrega' ? 'ENTREGA' : 'RETIRADA'}</div>
+        ${pedido.troco ? `<div><strong>Troco para:</strong> R$ ${pedido.troco.toFixed(2)}</div>` : ''}
+        ${pedido.tempoEstimado ? `<div><strong>Tempo estimado:</strong> ${pedido.tempoEstimado} min</div>` : ''}
+      </div>
+      
+      ${pedido.observacao ? `
+        <div class="separator"></div>
+        <div class="section">
+          <div class="section-title">OBSERVAÇÕES:</div>
+          <div class="obs">${pedido.observacao}</div>
+        </div>
+      ` : ''}
+      
+      <div class="footer">
+        <div>Obrigado pela preferência!</div>
+        <div>www.agzap.com.br</div>
+        <div>${formatDateTime(new Date())}</div>
+      </div>
+    </body>
+    </html>
+  `
   
-  // Para agora, vamos apenas mostrar no console
-  console.log(printContent)
+  // Escrever conteúdo na janela
+  printWindow.document.write(printContent)
+  printWindow.document.close()
   
-  // Em produção, você usaria uma biblioteca como:
-  // - node-thermal-printer
-  // - escpos
-  // - ou uma API específica da impressora
+  // Aguardar carregamento e imprimir
+  printWindow.onload = () => {
+    setTimeout(() => {
+      printWindow.print()
+      
+      // Fechar janela após impressão (opcional)
+      printWindow.onafterprint = () => {
+        printWindow.close()
+      }
+    }, 250)
+  }
+  
+  console.log(`Imprimindo pedido #${pedido.numero}`)
 }
 
-const formatForThermalPrint = (pedido: Pedido): string => {
-  const linha = '----------------------------------------'
-  const espacos = (texto: string, tamanho: number) => texto.padEnd(tamanho)
-  
-  let content = `
-${linha}
-           RESTAURANTE AGZAP
-${linha}
-Pedido: #${pedido.numero}
-Data: ${pedido.dataHora.toLocaleString('pt-BR')}
-Cliente: ${pedido.cliente}
-Telefone: ${pedido.telefone}
-${pedido.endereco ? `Endereço: ${pedido.endereco}` : 'RETIRADA NO BALCÃO'}
-${linha}
-ITENS:
-`
-
-  pedido.items.forEach(item => {
-    content += `${item.quantidade}x ${espacos(item.nome, 20)} R$ ${item.preco.toFixed(2)}\n`
-    if (item.observacao) {
-      content += `   Obs: ${item.observacao}\n`
-    }
+// Função auxiliar para formatar data/hora
+const formatDateTime = (date: Date) => {
+  return date.toLocaleString('pt-BR', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
   })
+}
 
-  content += `${linha}
-TOTAL: R$ ${pedido.total.toFixed(2)}
-Pagamento: ${pedido.formaPagamento.toUpperCase()}
-${pedido.troco ? `Troco para: R$ ${pedido.troco.toFixed(2)}` : ''}
-${pedido.observacao ? `\nObservação: ${pedido.observacao}` : ''}
-${linha}
-    Obrigado pela preferência!
-${linha}
-`
-
-  return content
+// Função auxiliar para labels de pagamento
+const getPaymentLabel = (payment: string) => {
+  const labels = {
+    dinheiro: 'Dinheiro',
+    cartao: 'Cartão',
+    pix: 'PIX'
+  }
+  return labels[payment as keyof typeof labels] || payment
 }
 </script>

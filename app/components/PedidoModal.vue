@@ -161,7 +161,7 @@
 
           <!-- Botão de imprimir sempre disponível -->
           <button
-            @click="pedido && $emit('print', pedido)"
+            @click="printPedido"
             class="px-4 py-2 bg-muted hover:bg-muted/80 text-foreground rounded-lg font-medium transition-colors"
           >
             <font-awesome-icon icon="print" class="w-4 h-4 mr-2" />
@@ -253,6 +253,214 @@ const getPaymentColor = (payment: string) => {
     pix: 'bg-orange-100 text-orange-700'
   }
   return colors[payment as keyof typeof colors] || 'bg-gray-100 text-gray-700'
+}
+
+const printPedido = () => {
+  if (!props.pedido) return
+  
+  // Criar janela de impressão
+  const printWindow = window.open('', '_blank', 'width=300,height=600')
+  
+  if (!printWindow) {
+    alert('Por favor, permita pop-ups para imprimir o pedido')
+    return
+  }
+
+  // HTML formatado para impressora térmica 80mm
+  const printContent = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="UTF-8">
+      <title>Pedido #${props.pedido.numero}</title>
+      <style>
+        @media print {
+          @page {
+            size: 80mm auto;
+            margin: 0;
+          }
+        }
+        
+        body {
+          font-family: 'Courier New', monospace;
+          font-size: 12px;
+          line-height: 1.2;
+          margin: 0;
+          padding: 8px;
+          width: 72mm;
+          color: #000;
+          background: #fff;
+        }
+        
+        .header {
+          text-align: center;
+          border-bottom: 1px dashed #000;
+          padding-bottom: 8px;
+          margin-bottom: 8px;
+        }
+        
+        .restaurant-name {
+          font-size: 16px;
+          font-weight: bold;
+          margin-bottom: 4px;
+        }
+        
+        .separator {
+          border-bottom: 1px dashed #000;
+          margin: 8px 0;
+        }
+        
+        .section {
+          margin-bottom: 8px;
+        }
+        
+        .section-title {
+          font-weight: bold;
+          margin-bottom: 4px;
+        }
+        
+        .item-line {
+          display: flex;
+          justify-content: space-between;
+          margin-bottom: 2px;
+        }
+        
+        .item-name {
+          flex: 1;
+        }
+        
+        .item-price {
+          text-align: right;
+          min-width: 60px;
+        }
+        
+        .total-line {
+          font-weight: bold;
+          font-size: 14px;
+          border-top: 1px solid #000;
+          padding-top: 4px;
+          margin-top: 8px;
+        }
+        
+        .footer {
+          text-align: center;
+          margin-top: 16px;
+          border-top: 1px dashed #000;
+          padding-top: 8px;
+        }
+        
+        .obs {
+          background: #f5f5f5;
+          padding: 4px;
+          margin: 4px 0;
+          border-left: 2px solid #666;
+        }
+        
+        @media screen {
+          body {
+            max-width: 300px;
+            margin: 20px auto;
+            border: 1px solid #ccc;
+          }
+        }
+      </style>
+    </head>
+    <body>
+      <div class="header">
+        <div class="restaurant-name">AGZAP DELIVERY</div>
+        <div>Tel: (11) 99999-9999</div>
+      </div>
+      
+      <div class="section">
+        <div style="display: flex; justify-content: space-between;">
+          <span><strong>Pedido:</strong> #${props.pedido.numero}</span>
+          <span><strong>Data:</strong> ${formatDateTime(props.pedido.dataHora)}</span>
+        </div>
+      </div>
+      
+      <div class="separator"></div>
+      
+      <div class="section">
+        <div class="section-title">CLIENTE:</div>
+        <div>${props.pedido.cliente}</div>
+        <div>${props.pedido.telefone}</div>
+        ${props.pedido.endereco ? `<div>${props.pedido.endereco}</div>` : '<div><strong>RETIRADA NO BALCÃO</strong></div>'}
+      </div>
+      
+      <div class="separator"></div>
+      
+      <div class="section">
+        <div class="section-title">ITENS:</div>
+        ${props.pedido.items.map(item => `
+          <div class="item-line">
+            <span class="item-name">${item.quantidade}x ${item.nome}</span>
+            <span class="item-price">R$ ${(item.quantidade * item.preco).toFixed(2)}</span>
+          </div>
+          ${item.observacao ? `<div class="obs">Obs: ${item.observacao}</div>` : ''}
+        `).join('')}
+      </div>
+      
+      <div class="separator"></div>
+      
+      <div class="section">
+        <div class="item-line total-line">
+          <span>TOTAL:</span>
+          <span>R$ ${props.pedido.total.toFixed(2)}</span>
+        </div>
+      </div>
+      
+      <div class="section">
+        <div><strong>Pagamento:</strong> ${getPaymentLabel(props.pedido.formaPagamento).toUpperCase()}</div>
+        <div><strong>Tipo:</strong> ${props.pedido.tipoEntrega === 'entrega' ? 'ENTREGA' : 'RETIRADA'}</div>
+        ${props.pedido.troco ? `<div><strong>Troco para:</strong> R$ ${props.pedido.troco.toFixed(2)}</div>` : ''}
+        ${props.pedido.tempoEstimado ? `<div><strong>Tempo estimado:</strong> ${props.pedido.tempoEstimado} min</div>` : ''}
+      </div>
+      
+      ${props.pedido.observacao ? `
+        <div class="separator"></div>
+        <div class="section">
+          <div class="section-title">OBSERVAÇÕES:</div>
+          <div class="obs">${props.pedido.observacao}</div>
+        </div>
+      ` : ''}
+      
+      <div class="footer">
+        <div>Obrigado pela preferência!</div>
+        <div>www.agzap.com.br</div>
+        <div>${formatDateTime(new Date())}</div>
+      </div>
+    </body>
+    </html>
+  `
+  
+  // Escrever conteúdo na janela
+  printWindow.document.write(printContent)
+  printWindow.document.close()
+  
+  // Aguardar carregamento e imprimir
+  printWindow.onload = () => {
+    setTimeout(() => {
+      printWindow.print()
+      
+      // Fechar janela após impressão (opcional)
+      printWindow.onafterprint = () => {
+        printWindow.close()
+      }
+    }, 250)
+  }
+  
+  console.log(`Imprimindo pedido #${props.pedido.numero}`)
+}
+
+// Função auxiliar para formatar data/hora
+const formatDateTime = (date: Date) => {
+  return date.toLocaleString('pt-BR', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  })
 }
 
 // Fechar modal com ESC
