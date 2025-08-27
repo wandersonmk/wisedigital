@@ -33,6 +33,6 @@ onMounted(async () => {
     />
     
     <!-- Página de Pedidos quando carregado -->
-    <PedidosOverview v-else />
+    <PedidosManager v-else />
   </div>
 </template>
