@@ -92,7 +92,11 @@ const isMobileMenuOpen = ref(false)
 // Estado das notificações
 const isNotificationOpen = ref(false)
 const notificationPanel = ref()
-const unreadNotifications = ref(3) // Valor inicial fictício
+
+// Computed para obter o número de notificações não lidas do painel
+const unreadNotifications = computed(() => {
+  return notificationPanel.value?.unreadCount || 0
+})
 
 // Composables para autenticação
 const { signOut } = useAuth()

@@ -5,7 +5,7 @@
   >
     <!-- Header do painel -->
     <div class="flex items-center justify-between p-4 border-b border-border">
-      <h3 class="text-lg font-semibold text-foreground">Notificações</h3>
+      <h3 class="text-lg font-semibold text-foreground">Notificações do Sistema</h3>
       <button 
         @click="$emit('close')"
         class="p-1 rounded text-muted-foreground hover:text-foreground transition-colors"
@@ -97,47 +97,63 @@ const emit = defineEmits<{
   'close': []
 }>()
 
-// Notificações fictícias
+// Notificações do sistema
 const notifications = ref<Notification[]>([
   {
     id: '1',
-    title: 'Cliente com vencimento próximo',
-    message: 'O cliente João Silva tem contrato vencendo em 3 dias',
+    title: 'Assinatura vence em 5 dias',
+    message: 'Sua assinatura do plano Pro vence em 01/09/2025. Renove para continuar usando o sistema',
     type: 'warning',
     date: new Date(2025, 7, 15),
     read: false
   },
   {
     id: '2',
-    title: 'Pagamento em atraso',
-    message: 'Maria Oliveira está com pagamento atrasado há 5 dias',
-    type: 'error',
-    date: new Date(2025, 7, 14),
+    title: 'Limite de pedidos: 85% atingido',
+    message: 'Você já utilizou 850 de 1000 pedidos do seu plano mensal. Considere fazer upgrade',
+    type: 'warning',
+    date: new Date(2025, 7, 15),
     read: false
   },
   {
     id: '3',
-    title: 'Novo cliente cadastrado',
-    message: 'Pedro Santos foi cadastrado com sucesso',
-    type: 'success',
+    title: 'Nova atualização disponível',
+    message: 'Versão 2.1.0 com melhorias no dashboard e correções de bugs',
+    type: 'info',
+    date: new Date(2025, 7, 14),
+    read: false
+  },
+  {
+    id: '4',
+    title: 'Manutenção programada',
+    message: 'Sistema ficará indisponível por 30 minutos no domingo às 02:00',
+    type: 'warning',
     date: new Date(2025, 7, 13),
     read: true
   },
   {
-    id: '4',
-    title: 'Renovação automática',
-    message: 'Ana Costa renovou automaticamente seu plano',
-    type: 'info',
+    id: '5',
+    title: 'Nova funcionalidade: Relatórios',
+    message: 'Agora você pode gerar relatórios detalhados de pedidos e vendas',
+    type: 'success',
     date: new Date(2025, 7, 12),
     read: true
   },
   {
-    id: '5',
-    title: 'Contrato expirado',
-    message: 'O contrato de Carlos Ferreira expirou ontem',
-    type: 'error',
+    id: '6',
+    title: 'Melhorias na performance',
+    message: 'Dashboard agora carrega 40% mais rápido com otimizações implementadas',
+    type: 'success',
     date: new Date(2025, 7, 11),
-    read: false
+    read: true
+  },
+  {
+    id: '7',
+    title: 'Política de privacidade atualizada',
+    message: 'Nossa política de privacidade foi atualizada. Confira as mudanças',
+    type: 'info',
+    date: new Date(2025, 7, 10),
+    read: true
   }
 ])
 
