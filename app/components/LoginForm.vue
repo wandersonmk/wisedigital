@@ -42,36 +42,35 @@ async function handleLogin() {
   
   try {
     console.log('LoginForm: Iniciando login...')
-    await signInWithEmailAndPassword(email.value, password.value)
-    
-    console.log('LoginForm: Login feito, aguardando estado atualizar...')
-    // Aguarda o estado ser atualizado
+    const result = await signInWithEmailAndPassword(email.value, password.value)
     await new Promise(resolve => setTimeout(resolve, 200))
-    
+
+    // Se login falhou, mostra erro
+    if (!result) {
+      console.error('LoginForm: Erro no login:', errorMessage.value)
+      toast?.error(errorMessage.value || 'Erro ao efetuar login. Verifique seus dados.')
+      return
+    }
+
+    // Se login OK, mostra sucesso
     const { isAuthenticated, user } = useAuth()
     console.log('LoginForm: Estado atual após delay:', { 
       isAuthenticated: isAuthenticated.value, 
       hasUser: !!user.value,
       email: user.value?.email 
     })
-    
-    // Salvar email no localStorage para o sidebar
+
     if (process.client && user.value?.email) {
       localStorage.setItem('user_email', user.value.email)
       console.log('LoginForm: Email salvo no localStorage:', user.value.email)
     }
-    
+
     toast?.success('Login realizado com sucesso!')
-    
-    console.log('LoginForm: Tentando navegar para /')
     await navigateTo('/')
     console.log('LoginForm: NavigateTo executado')
   } catch (error) {
-    console.error('LoginForm: Erro no login:', error)
-    // Mostra erro via toast
-    if (errorMessage.value) {
-      toast?.error(errorMessage.value)
-    }
+    console.error('LoginForm: Erro inesperado no login:', error)
+    toast?.error('Erro inesperado ao efetuar login.')
   }
 }
 </script>

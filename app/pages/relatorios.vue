@@ -7,20 +7,25 @@ definePageMeta({
 
 // Estado de carregamento
 const isLoading = ref(true)
-const { isLoading: authLoading } = useAuth()
+let authLoading: any = ref(false)
 
-// Aguarda a autenticação ser carregada e adiciona um delay mínimo para UX
-onMounted(async () => {
-  // Aguarda o auth loading terminar
-  while (authLoading.value) {
-    await new Promise(resolve => setTimeout(resolve, 50))
-  }
-  
-  // Delay reduzido para carregamento mais rápido
-  await new Promise(resolve => setTimeout(resolve, 300))
-  
+if (process.client) {
+  // Só executa useAuth no cliente
+  const auth = useAuth()
+  authLoading = auth.isLoading
+
+  onMounted(async () => {
+    // Aguarda o auth loading terminar
+    while (authLoading.value) {
+      await new Promise(resolve => setTimeout(resolve, 50))
+    }
+    // Delay reduzido para carregamento mais rápido
+    await new Promise(resolve => setTimeout(resolve, 300))
+    isLoading.value = false
+  })
+} else {
   isLoading.value = false
-})
+}
 </script>
 
 <template>
