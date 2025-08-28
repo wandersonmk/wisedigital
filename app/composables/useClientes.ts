@@ -3,7 +3,6 @@ import type { PostgrestResponse } from '@supabase/supabase-js'
 // Interface para tipagem do cliente
 export interface Cliente {
   id: string
-  usuario_id: string
   nome: string
   telefone: string
   empresa?: string
@@ -25,29 +24,15 @@ export const useClientes = () => {
   const isLoading = ref(false)
   const error = ref<string | null>(null)
 
-  // Buscar todos os clientes do usuário
+  // Buscar todos os clientes (sem filtro por usuário)
   const fetchClientes = async (): Promise<void> => {
     console.log('🔍 Iniciando busca de clientes...')
-    
+    isLoading.value = true
+    error.value = null
     try {
-      // Obter usuário atual do Supabase Auth
-      const { data: { user }, error: userError } = await supabase.auth.getUser()
-      
-      if (userError || !user?.id) {
-        console.warn('⚠️ Usuário não está logado:', userError)
-        error.value = 'Usuário não está logado'
-        return
-      }
-
-      console.log('👤 Usuário logado:', user.email)
-      isLoading.value = true
-      error.value = null
-
-      console.log('📡 Buscando clientes do usuário...')
       const { data, error: clientesError }: PostgrestResponse<Cliente> = await supabase
         .from('clientes')
         .select('*')
-        .eq('usuario_id', user.id)
         .order('created_at', { ascending: false })
 
       console.log('📊 Resultado da busca:', { data, error: clientesError })
@@ -60,7 +45,6 @@ export const useClientes = () => {
 
       console.log(`✅ ${data?.length || 0} clientes encontrados`)
       clientes.value = data || []
-      
     } catch (err) {
       console.error('💥 Erro inesperado ao buscar clientes:', err)
       error.value = 'Erro inesperado ao carregar clientes'
@@ -69,29 +53,15 @@ export const useClientes = () => {
     }
   }
 
-  // Adicionar novo cliente
+  // Adicionar novo cliente (sem usuario_id)
   const addCliente = async (clienteData: ClienteInput): Promise<boolean> => {
     console.log('➕ Adicionando novo cliente:', clienteData)
-
+    isLoading.value = true
+    error.value = null
     try {
-      // Obter usuário atual
-      const { data: { user }, error: userError } = await supabase.auth.getUser()
-      
-      if (userError || !user?.id) {
-        console.warn('⚠️ Usuário não está logado:', userError)
-        error.value = 'Usuário não está logado'
-        return false
-      }
-
-      isLoading.value = true
-      error.value = null
-
       const { data, error: insertError } = await supabase
         .from('clientes')
-        .insert([{
-          ...clienteData,
-          usuario_id: user.id
-        }])
+        .insert([clienteData])
         .select()
 
       if (insertError) {
@@ -101,11 +71,9 @@ export const useClientes = () => {
       }
 
       console.log('✅ Cliente adicionado com sucesso:', data)
-      
       // Recarregar lista de clientes
       await fetchClientes()
       return true
-      
     } catch (err) {
       console.error('💥 Erro inesperado ao adicionar cliente:', err)
       error.value = 'Erro inesperado ao adicionar cliente'
