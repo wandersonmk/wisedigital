@@ -81,6 +81,8 @@ const pageTitle = computed(() => {
       return 'Relatórios de Tickets'
     case '/configuracoes':
       return 'Configurações'
+    case '/ajuda':
+      return 'Ajuda'
     case '/ajuste-da-ia':
       return 'Ajuste da IA'
     default:
@@ -104,6 +106,8 @@ const pageDescription = computed(() => {
       return 'Gerencie todos os relatórios de chamados'
     case '/configuracoes':
       return 'Configure e gerencie as configurações do sistema'
+    case '/ajuda':
+      return 'Central de ajuda e guias do sistema'
     case '/ajuste-da-ia':
       return 'Configure as configurações de inteligência artificial'
     default:

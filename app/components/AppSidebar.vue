@@ -86,15 +86,17 @@
 
           <!-- Ajuda -->
           <li>
-            <button 
-              class="flex items-center w-full px-3 py-2 rounded-lg text-sm font-medium text-foreground/80 hover:text-foreground hover:bg-muted transition-colors"
+            <NuxtLink 
+              to="/ajuda"
+              class="flex items-center w-full px-3 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-muted group relative"
+              :class="$route.path === '/ajuda' ? 'bg-primary text-primary-foreground' : 'text-foreground/80 hover:text-foreground'"
             >
               <font-awesome-icon 
                 icon="question-circle" 
                 class="w-5 h-5 mr-3" 
               />
               <span>Ajuda</span>
-            </button>
+            </NuxtLink>
           </li>
         </ul>
       </nav>
@@ -230,15 +232,18 @@
 
           <!-- Ajuda -->
           <li>
-            <button 
-              class="flex items-center w-full px-3 py-2 rounded-lg text-sm font-medium text-foreground/80 hover:text-foreground hover:bg-muted transition-colors"
+            <NuxtLink 
+              to="/ajuda"
+              @click="$emit('close-mobile')"
+              class="flex items-center w-full px-3 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-muted group relative"
+              :class="$route.path === '/ajuda' ? 'bg-primary text-primary-foreground' : 'text-foreground/80 hover:text-foreground'"
             >
               <font-awesome-icon 
                 icon="question-circle" 
                 class="w-5 h-5 mr-3" 
               />
               <span>Ajuda</span>
-            </button>
+            </NuxtLink>
           </li>
         </ul>
       </nav>
