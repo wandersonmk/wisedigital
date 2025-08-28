@@ -36,10 +36,6 @@
         </ul>
       </div>
 
-      <!-- Botão para voltar ao login -->
-      <AppButton @click="goToLogin" class="w-full" variant="primary">
-        Ir para Login
-      </AppButton>
 
       <!-- Logo ou marca -->
       <div class="mt-8 pt-6 border-t border-border">
