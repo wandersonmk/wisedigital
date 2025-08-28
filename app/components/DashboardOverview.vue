@@ -62,14 +62,12 @@
           <div class="absolute inset-0 bg-gradient-to-r from-transparent via-indigo-500/8 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
           <div class="relative z-10 flex items-center justify-between">
             <div>
-              <p class="text-sm text-gray-400 mb-1">Tickets Totais</p>
+              <p class="text-sm text-gray-400 mb-1">Total de Clientes</p>
               <p class="text-2xl font-bold text-foreground">{{ metrics.ticketsTotais.toLocaleString('pt-BR') }}</p>
-              <p class="text-xs text-indigo-600 mt-1">total de tickets</p>
+              <p class="text-xs text-indigo-600 mt-1">total de clientes</p>
             </div>
             <div class="w-12 h-12 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-lg flex items-center justify-center shadow-lg">
-              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2a4 4 0 014-4h2a4 4 0 014 4v2a4 4 0 01-4 4h-2a4 4 0 01-4-4z"/>
-              </svg>
+              <font-awesome-icon :icon="['fas', 'users']" class="text-white text-2xl" />
             </div>
           </div>
         </div>
@@ -104,12 +102,12 @@ const metrics = ref({
   faturamento: 0,
   ticketsTotais: 0
 })
-// Buscar total de tickets na tabela relatorios
+// Buscar total de clientes na tabela clientes
 async function fetchTicketsTotais() {
   if (!process.client) return
   const supabase = useSupabaseClient()
   const { count, error } = await supabase
-    .from('relatorios')
+    .from('clientes')
     .select('id', { count: 'exact', head: true })
   if (!error && typeof count === 'number') {
     metrics.value.ticketsTotais = count
