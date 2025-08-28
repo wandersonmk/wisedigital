@@ -23,7 +23,7 @@
             <h1 class="text-lg font-bold truncate">
               {{ nomeEmpresa || 'Carregando...' }}
             </h1>
-            <p class="text-xs text-muted-foreground">Sistema de Gestão</p>
+            <p class="text-xs text-muted-foreground">Sistema de Relatório</p>
           </div>
         </div>
       </div>
@@ -46,36 +46,6 @@
             </NuxtLink>
           </li>
 
-          <!-- Pedidos -->
-          <li>
-            <NuxtLink 
-              to="/pedidos"
-              class="flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-muted group relative"
-              :class="$route.path === '/pedidos' ? 'bg-primary text-primary-foreground' : 'text-foreground/80 hover:text-foreground'"
-            >
-              <font-awesome-icon 
-                icon="shopping-cart" 
-                class="w-5 h-5 mr-3" 
-              />
-              <span>Pedidos</span>
-            </NuxtLink>
-          </li>
-
-          <!-- Cardápio -->
-          <li>
-            <NuxtLink 
-              to="/cardapio"
-              class="flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-muted group relative"
-              :class="$route.path === '/cardapio' ? 'bg-primary text-primary-foreground' : 'text-foreground/80 hover:text-foreground'"
-            >
-              <font-awesome-icon 
-                icon="utensils" 
-                class="w-5 h-5 mr-3" 
-              />
-              <span>Cardápio</span>
-            </NuxtLink>
-          </li>
-
           <!-- Clientes -->
           <li>
             <NuxtLink 
@@ -88,21 +58,6 @@
                 class="w-5 h-5 mr-3" 
               />
               <span>Clientes</span>
-            </NuxtLink>
-          </li>
-
-          <!-- Analytics -->
-          <li>
-            <NuxtLink 
-              to="/ajuste-da-ia"
-              class="flex items-center w-full px-3 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-muted group relative"
-              :class="$route.path === '/ajuste-da-ia' ? 'bg-primary text-primary-foreground' : 'text-foreground/80 hover:text-foreground'"
-            >
-              <font-awesome-icon 
-                icon="robot" 
-                class="w-5 h-5 mr-3" 
-              />
-              <span>Ajuste da IA</span>
             </NuxtLink>
           </li>
 
@@ -201,7 +156,7 @@
             <h1 class="text-lg font-bold truncate">
               {{ nomeEmpresa || 'Carregando...' }}
             </h1>
-            <p class="text-xs text-muted-foreground">Sistema de Gestão</p>
+            <p class="text-xs text-muted-foreground">Sistema de Relatório</p>
           </div>
         </div>
         
@@ -235,38 +190,6 @@
             </NuxtLink>
           </li>
 
-          <!-- Pedidos -->
-          <li>
-            <NuxtLink 
-              to="/pedidos"
-              @click="$emit('close-mobile')"
-              class="flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-muted group relative"
-              :class="$route.path === '/pedidos' ? 'bg-primary text-primary-foreground' : 'text-foreground/80 hover:text-foreground'"
-            >
-              <font-awesome-icon 
-                icon="shopping-cart" 
-                class="w-5 h-5 mr-3" 
-              />
-              <span>Pedidos</span>
-            </NuxtLink>
-          </li>
-
-          <!-- Cardápio -->
-          <li>
-            <NuxtLink 
-              to="/cardapio"
-              @click="$emit('close-mobile')"
-              class="flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-muted group relative"
-              :class="$route.path === '/cardapio' ? 'bg-primary text-primary-foreground' : 'text-foreground/80 hover:text-foreground'"
-            >
-              <font-awesome-icon 
-                icon="utensils" 
-                class="w-5 h-5 mr-3" 
-              />
-              <span>Cardápio</span>
-            </NuxtLink>
-          </li>
-
           <!-- Clientes -->
           <li>
             <NuxtLink 
@@ -280,22 +203,6 @@
                 class="w-5 h-5 mr-3" 
               />
               <span>Clientes</span>
-            </NuxtLink>
-          </li>
-
-          <!-- Analytics -->
-          <li>
-            <NuxtLink 
-              to="/ajuste-da-ia"
-              @click="$emit('close-mobile')"
-              class="flex items-center w-full px-3 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-muted group relative"
-              :class="$route.path === '/ajuste-da-ia' ? 'bg-primary text-primary-foreground' : 'text-foreground/80 hover:text-foreground'"
-            >
-              <font-awesome-icon 
-                icon="robot" 
-                class="w-5 h-5 mr-3" 
-              />
-              <span>Ajuste da IA</span>
             </NuxtLink>
           </li>
 
