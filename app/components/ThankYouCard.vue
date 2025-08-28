@@ -15,12 +15,12 @@
 
       <!-- Subtítulo -->
       <h2 class="text-xl font-bold text-foreground mb-6">
-        Bem-vindo ao Sistema Agzap
+        Bem-vindo ao Sistema Wise Digital
       </h2>
 
       <!-- Mensagem de agradecimento -->
       <p class="text-base text-gray-300 mb-8 leading-relaxed">
-        Agradecemos por se cadastrar no <strong class="text-primary font-semibold">Agzap</strong>!
+        Agradecemos por se cadastrar no <strong class="text-primary font-semibold">Wise Digital</strong>!
         <br><br>
         Sua conta foi criada com sucesso. Verifique seu email para confirmar 
         sua conta e começar a usar nossa plataforma.
@@ -37,17 +37,17 @@
       </div>
 
       <!-- Botão para voltar ao login -->
-      <AppButton @click="goToLogin" class="w-full" variant="default">
+      <AppButton @click="goToLogin" class="w-full" variant="primary">
         Ir para Login
       </AppButton>
 
       <!-- Logo ou marca -->
       <div class="mt-8 pt-6 border-t border-border">
         <p class="text-sm font-semibold text-foreground">
-          Agzap Gestão de Clientes
+          Wise Digital Gestão de Relatórios
         </p>
         <p class="text-xs text-gray-400 mt-1">
-          © 2025 Agzap - Todos os direitos reservados
+          © 2025 Wise Digital - Todos os direitos reservados
         </p>
       </div>
     </div>
