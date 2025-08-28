@@ -35,7 +35,7 @@ export function useAuth() {
       isLoading.value = false
     }
   }
-  const signUp = async ({ name, email, password }: { name: string, email: string, password: string }) => {
+  const signUp = async ({ name, companyName, email, password }: { name: string, companyName: string, email: string, password: string }) => {
     isLoading.value = true
     errorMessage.value = null
     try {
@@ -47,6 +47,7 @@ export function useAuth() {
       // Registrar usuário na tabela usuarios
       await supabase.from('usuarios').insert({
         nome: name,
+        empresa: companyName,
         email: email,
         perfil: 'admin'
       })

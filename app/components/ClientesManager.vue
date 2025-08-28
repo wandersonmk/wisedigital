@@ -226,7 +226,8 @@ watch(
     if (sentinel.value && clientes.value && clientes.value.length > 10) {
       if (!observer) {
         observer = new IntersectionObserver((entries) => {
-          if (entries[0].isIntersecting) {
+          const entry = entries[0]
+          if (entry && entry.isIntersecting) {
             if (clientesVisiveis.value < clientes.value.length) {
               clientesVisiveis.value += 10
             }
