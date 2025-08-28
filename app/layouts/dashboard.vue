@@ -79,6 +79,8 @@ const pageTitle = computed(() => {
       return 'Clientes'
     case '/relatorios':
       return 'Relatórios de Tickets'
+    case '/configuracoes':
+      return 'Configurações'
     case '/ajuste-da-ia':
       return 'Ajuste da IA'
     default:
@@ -100,6 +102,8 @@ const pageDescription = computed(() => {
       return 'Gerencie todos os seus clientes'
     case '/relatorios':
       return 'Gerencie todos os relatórios de chamados'
+    case '/configuracoes':
+      return 'Configure e gerencie as configurações do sistema'
     case '/ajuste-da-ia':
       return 'Configure as configurações de inteligência artificial'
     default:

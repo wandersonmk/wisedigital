@@ -22,11 +22,13 @@ import {
   faShoppingCart,
   faUtensils,
   faTrash,
+  faTrashAlt,
   faFilePdf,
   faFileExcel,
   faPhone,
   faComments,
-  faFilter
+  faFilter,
+  faDatabase
 } from '@fortawesome/free-solid-svg-icons'
 
 // This is important, we are going to let Nuxt worry about the CSS
@@ -56,11 +58,13 @@ library.add(
   faShoppingCart,
   faUtensils,
   faTrash,
+  faTrashAlt,
   faFilePdf,
   faFileExcel,
   faPhone,
   faComments,
-  faFilter
+  faFilter,
+  faDatabase
 )
 
 export default defineNuxtPlugin((nuxtApp) => {
