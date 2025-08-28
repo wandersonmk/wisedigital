@@ -144,73 +144,81 @@
       </div>
 
       <!-- Tabela de relatórios -->
-      <div v-else class="overflow-x-auto">
-        <table class="w-full">
-          <thead>
-            <tr class="border-b border-border">
-              <th class="text-left py-3 px-4 font-medium text-muted-foreground">Nome</th>
-              <th class="text-left py-3 px-4 font-medium text-muted-foreground">Telefone</th>
-              <th class="text-left py-3 px-4 font-medium text-muted-foreground">Loja</th>
-              <th class="text-left py-3 px-4 font-medium text-muted-foreground">CNPJ</th>
-              <th class="text-left py-3 px-4 font-medium text-muted-foreground">Data/Hora</th>
-              <th class="text-left py-3 px-4 font-medium text-muted-foreground">Motivo</th>
-              <th class="text-left py-3 px-4 font-medium text-muted-foreground">Empresa</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr 
-              v-for="relatorio in relatoriosFiltrados" 
-              :key="relatorio.id"
-              class="border-b border-border/50 hover:bg-muted/30 transition-colors"
-            >
-              <!-- Nome da pessoa -->
-              <td class="py-4 px-4">
-                <div class="flex items-center">
-                  <div class="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center mr-3">
-                    <font-awesome-icon icon="user" class="w-4 h-4 text-primary" />
+      <div class="overflow-x-auto">
+        <div style="max-height: 400px; overflow-y: auto;">
+          <table class="w-full">
+            <thead>
+              <tr class="border-b border-border">
+                <th class="text-left py-2 px-3 font-medium text-muted-foreground text-xs">Nome</th>
+                <th class="text-left py-2 px-3 font-medium text-muted-foreground text-xs">Telefone</th>
+                <th class="text-left py-2 px-3 font-medium text-muted-foreground text-xs">Loja</th>
+                <th class="text-left py-2 px-3 font-medium text-muted-foreground text-xs">CNPJ</th>
+                <th class="text-left py-2 px-3 font-medium text-muted-foreground text-xs">Data/Hora</th>
+                <th class="text-left py-2 px-3 font-medium text-muted-foreground text-xs">Motivo</th>
+                <th class="text-left py-2 px-3 font-medium text-muted-foreground text-xs">Empresa</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr 
+                v-for="relatorio in (relatoriosFiltrados ? relatoriosFiltrados.slice(0, relatoriosVisiveis) : [])" 
+                :key="relatorio.id"
+                class="border-b border-border/50 hover:bg-muted/30 transition-colors"
+              >
+                <!-- Nome da pessoa -->
+                <td class="py-3 px-3">
+                  <div class="flex items-center">
+                    <div class="w-6 h-6 bg-primary/10 rounded-full flex items-center justify-center mr-2">
+                      <font-awesome-icon icon="user" class="w-3 h-3 text-primary" />
+                    </div>
+                    <span class="font-medium text-foreground text-sm">{{ relatorio.nome_pessoa }}</span>
                   </div>
-                  <span class="font-medium text-foreground">{{ relatorio.nome_pessoa }}</span>
-                </div>
-              </td>
+                </td>
+                
+                <!-- Telefone -->
+                <td class="py-3 px-3">
+                  <span class="text-foreground text-sm">{{ relatorio.telefone }}</span>
+                </td>
+                
+                <!-- Nome da loja -->
+                <td class="py-3 px-3">
+                  <span class="text-foreground font-medium text-sm">{{ relatorio.nome_loja }}</span>
+                </td>
+                
+                <!-- CNPJ -->
+                <td class="py-3 px-3">
+                  <span class="text-foreground text-xs font-mono">{{ relatorio.cnpj }}</span>
+                </td>
+                
+                <!-- Data e Hora -->
+                <td class="py-3 px-3">
+                  <div class="text-xs">
+                    <div class="font-medium text-foreground">{{ relatorio.data_abertura_chamado }}</div>
+                    <div class="text-muted-foreground">{{ relatorio.hora_abertura_chamado }}</div>
+                  </div>
+                </td>
+                
+                <!-- Motivo -->
+                <td class="py-3 px-3">
+                  <span class="text-foreground text-xs">{{ relatorio.motivo_chamado }}</span>
+                </td>
+                
+                <!-- Empresa -->
+                <td class="py-3 px-3">
+                  <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium"
+                        :class="getEmpresaClass(relatorio.nome_empresa)">
+                    {{ relatorio.nome_empresa }}
+                  </span>
+                </td>
+              </tr>
               
-              <!-- Telefone -->
-              <td class="py-4 px-4">
-                <span class="text-foreground">{{ relatorio.telefone }}</span>
-              </td>
-              
-              <!-- Nome da loja -->
-              <td class="py-4 px-4">
-                <span class="text-foreground font-medium">{{ relatorio.nome_loja }}</span>
-              </td>
-              
-              <!-- CNPJ -->
-              <td class="py-4 px-4">
-                <span class="text-foreground text-sm font-mono">{{ relatorio.cnpj }}</span>
-              </td>
-              
-              <!-- Data e Hora -->
-              <td class="py-4 px-4">
-                <div class="text-sm">
-                  <div class="font-medium text-foreground">{{ relatorio.data_abertura_chamado }}</div>
-                  <div class="text-muted-foreground">{{ relatorio.hora_abertura_chamado }}</div>
-                </div>
-              </td>
-              
-              <!-- Motivo -->
-              <td class="py-4 px-4">
-                <span class="text-foreground text-sm">{{ relatorio.motivo_chamado }}</span>
-              </td>
-              
-              <!-- Empresa -->
-              <td class="py-4 px-4">
-                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium"
-                      :class="getEmpresaClass(relatorio.nome_empresa)">
-                  {{ relatorio.nome_empresa }}
-                </span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+              <tr v-if="relatoriosFiltrados && relatoriosVisiveis < relatoriosFiltrados.length">
+                <td :colspan="7">
+                  <div ref="relatorioSentinel" style="height: 1px;"></div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
 
       <!-- Informações de resumo -->
@@ -711,6 +719,33 @@ async function exportToExcel() {
     alert('Erro ao gerar o arquivo Excel. Tente novamente.')
   }
 }
+
+// Infinite scroll
+const relatoriosVisiveis = ref(10)
+const relatorioSentinel = ref<HTMLElement | null>(null)
+let relatorioObserver: IntersectionObserver | null = null
+
+onMounted(() => {
+  fetchRelatorios()
+})
+
+watch(
+  () => relatoriosFiltrados?.length,
+  () => {
+    if (relatorioSentinel.value && relatoriosFiltrados && relatoriosFiltrados.length > 10) {
+      if (!relatorioObserver) {
+        relatorioObserver = new IntersectionObserver((entries) => {
+          if (entries[0]?.isIntersecting) {
+            if (relatoriosVisiveis.value < relatoriosFiltrados.length) {
+              relatoriosVisiveis.value += 10
+            }
+          }
+        })
+        relatorioObserver.observe(relatorioSentinel.value)
+      }
+    }
+  }
+)
 </script>
 
 <style scoped>

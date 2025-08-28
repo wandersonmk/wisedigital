@@ -170,6 +170,11 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
+import { useSupabaseClient } from '../composables/useSupabaseClient'
+
+const supabase = useSupabaseClient()
+
 // Estados dos modais
 const mostrarModalClientes = ref(false)
 const mostrarModalTickets = ref(false)
@@ -185,14 +190,15 @@ function confirmarLimpezaTickets() {
 }
 
 // Função para limpar clientes (placeholder - sem ação de banco ainda)
-function limparClientes() {
-  console.log('🗑️ [Configurações] Limpeza de clientes solicitada (placeholder)')
-  
-  // Fechar modal
-  mostrarModalClientes.value = false
-  
-  // Aqui futuramente será implementada a lógica de limpeza do banco
-  alert('Funcionalidade de limpeza de clientes será implementada em breve.')
+async function limparClientes() {
+  try {
+    const { error } = await supabase.from('clientes').delete().neq('id', '')
+    if (error) throw error
+    mostrarModalClientes.value = false
+    alert('Todos os clientes foram removidos com sucesso!')
+  } catch (err) {
+    alert('Erro ao limpar clientes: ' + String(err))
+  }
 }
 
 // Função para limpar tickets (placeholder - sem ação de banco ainda)

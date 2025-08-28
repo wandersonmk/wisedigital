@@ -76,72 +76,81 @@
 
       <!-- Tabela de clientes -->
       <div v-else class="overflow-x-auto">
-        <table class="w-full">
-          <thead>
-            <tr class="border-b border-border">
-              <th class="text-left py-3 px-4 font-medium text-muted-foreground">Nome</th>
-              <th class="text-left py-3 px-4 font-medium text-muted-foreground">Telefone</th>
-              <th class="text-left py-3 px-4 font-medium text-muted-foreground">Empresa</th>
-              <th class="text-right py-3 px-4 font-medium text-muted-foreground">Ações</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr 
-              v-for="cliente in clientes" 
-              :key="cliente.id"
-              class="border-b border-border/50 hover:bg-muted/30 transition-colors"
-            >
-              <!-- Nome do cliente -->
-              <td class="py-4 px-4">
-                <div class="flex items-center">
-                  <div class="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center mr-3">
-                    <font-awesome-icon icon="user" class="w-4 h-4 text-primary" />
+        <div style="max-height: 400px; overflow-y: auto;">
+          <table class="w-full">
+            <thead>
+              <tr class="border-b border-border">
+                <th class="text-left py-2 px-3 font-medium text-muted-foreground text-xs">Nome</th>
+                <th class="text-left py-2 px-3 font-medium text-muted-foreground text-xs">Telefone</th>
+                <th class="text-left py-2 px-3 font-medium text-muted-foreground text-xs">Empresa</th>
+                <th class="text-right py-2 px-3 font-medium text-muted-foreground text-xs">Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr 
+                v-for="cliente in (clientes ? clientes.slice(0, clientesVisiveis) : [])" 
+                :key="cliente.id"
+                class="border-b border-border/50 hover:bg-muted/30 transition-colors"
+              >
+                <!-- Nome do cliente -->
+                <td class="py-3 px-3">
+                  <div class="flex items-center">
+                    <div class="w-6 h-6 bg-primary/10 rounded-full flex items-center justify-center mr-2">
+                      <font-awesome-icon icon="user" class="w-3 h-3 text-primary" />
+                    </div>
+                    <span class="font-medium text-foreground text-sm">{{ cliente.nome }}</span>
                   </div>
-                  <span class="font-medium text-foreground">{{ cliente.nome }}</span>
-                </div>
-              </td>
-              
-              <!-- Telefone do cliente -->
-              <td class="py-4 px-4">
-                <span class="text-foreground">{{ cliente.telefone }}</span>
-              </td>
-              
-              <!-- Empresa do cliente -->
-              <td class="py-4 px-4">
-                <span class="text-foreground font-medium">{{ cliente.empresa }}</span>
-              </td>
-              
-              <!-- Botões de ação -->
-              <td class="py-4 px-4 text-right">
-                <div class="flex items-center justify-end space-x-2">
-                  <!-- Botão WhatsApp -->
-                  <button
-                    @click="abrirWhatsApp(cliente)"
-                    class="p-2 text-green-500 hover:text-green-600 hover:bg-green-50 dark:hover:bg-green-900/20 rounded-lg transition-all duration-200 group"
-                    title="Conversar no WhatsApp"
-                  >
-                    <font-awesome-icon 
-                      icon="comments" 
-                      class="w-4 h-4 group-hover:scale-110 transition-transform duration-200" 
-                    />
-                  </button>
-                  
-                  <!-- Botão de excluir -->
-                  <button
-                    @click="confirmarExclusao(cliente)"
-                    class="p-2 text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all duration-200 group"
-                    title="Excluir cliente"
-                  >
-                    <font-awesome-icon 
-                      icon="trash" 
-                      class="w-4 h-4 group-hover:scale-110 transition-transform duration-200" 
-                    />
-                  </button>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+                </td>
+                
+                <!-- Telefone do cliente -->
+                <td class="py-3 px-3">
+                  <span class="text-foreground text-sm">{{ cliente.telefone }}</span>
+                </td>
+                
+                <!-- Empresa do cliente -->
+                <td class="py-3 px-3">
+                  <span class="text-foreground font-medium text-sm">{{ cliente.empresa }}</span>
+                </td>
+                
+                <!-- Botões de ação -->
+                <td class="py-3 px-3 text-right">
+                  <div class="flex items-center justify-end space-x-2">
+                    <!-- Botão WhatsApp -->
+                    <button
+                      @click="abrirWhatsApp(cliente)"
+                      class="p-2 text-green-500 hover:text-green-600 hover:bg-green-50 dark:hover:bg-green-900/20 rounded-lg transition-all duration-200 group"
+                      title="Conversar no WhatsApp"
+                    >
+                      <font-awesome-icon 
+                        icon="comments" 
+                        class="w-4 h-4 group-hover:scale-110 transition-transform duration-200" 
+                      />
+                    </button>
+                    
+                    <!-- Botão de excluir -->
+                    <button
+                      @click="confirmarExclusao(cliente)"
+                      class="p-2 text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all duration-200 group"
+                      title="Excluir cliente"
+                    >
+                      <font-awesome-icon 
+                        icon="trash" 
+                        class="w-4 h-4 group-hover:scale-110 transition-transform duration-200" 
+                      />
+                    </button>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Sentinel para infinite scroll -->
+              <tr v-if="clientes && clientesVisiveis < clientes.length">
+                <td :colspan="4">
+                  <div ref="sentinel" style="height: 1px;"></div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
 
@@ -199,10 +208,32 @@ const {
 // Estado para modal de confirmação de exclusão
 const clienteParaExcluir = ref<any>(null)
 
-// Carregar clientes quando o componente for montado
+// Infinite scroll
+const clientesVisiveis = ref(10)
+const sentinel = ref<HTMLElement | null>(null)
+let observer: IntersectionObserver | null = null
+
 onMounted(() => {
   fetchClientes()
 })
+
+watch(
+  () => clientes.value?.length,
+  () => {
+    if (sentinel.value && clientes.value && clientes.value.length > 10) {
+      if (!observer) {
+        observer = new IntersectionObserver((entries) => {
+          if (entries[0].isIntersecting) {
+            if (clientesVisiveis.value < clientes.value.length) {
+              clientesVisiveis.value += 10
+            }
+          }
+        })
+        observer.observe(sentinel.value)
+      }
+    }
+  }
+)
 
 // Função para recarregar clientes
 const recarregarClientes = () => {
