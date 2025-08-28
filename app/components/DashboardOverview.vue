@@ -99,7 +99,7 @@ const lineChartRef = ref<HTMLCanvasElement | null>(null)
 
 const metrics = ref({
   clientesHoje: 0,
-  clientesNovos: 8,
+  clientesNovos: 0,
   clientesVencendo: 12,
   faturamento: 3250
 })
@@ -123,10 +123,29 @@ async function fetchTicketsHoje() {
   }
 }
 
+// Buscar quantidade de tickets da semana na tabela relatorios
+async function fetchTicketsSemana() {
+  if (!process.client) return
+  const supabase = useSupabaseClient()
+  // Tickets na semana (últimos 7 dias, incluindo hoje) usando created_at
+  const startDate = new Date();
+  startDate.setHours(0, 0, 0, 0);
+  startDate.setDate(startDate.getDate() - 6); // 6 dias atrás + hoje = 7 dias
+  const endDate = new Date();
+  endDate.setHours(23, 59, 59, 999);
+  const { data: ticketsSemana, error: errorSemana } = await supabase
+    .from('relatorios')
+    .select('id')
+    .gte('created_at', startDate.toISOString())
+    .lte('created_at', endDate.toISOString());
+  metrics.value.clientesNovos = ticketsSemana?.length || 0;
+}
+
 onMounted(() => {
   nextTick(() => {
     createLineChart()
     fetchTicketsHoje()
+    fetchTicketsSemana()
   })
 })
 
