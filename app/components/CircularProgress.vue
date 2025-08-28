@@ -1,6 +1,6 @@
 <template>
   <div class="bg-card text-card-foreground rounded-lg border border-border shadow-sm p-6">
-    <h3 class="text-lg font-semibold text-foreground mb-6">Limite de Pedidos</h3>
+    <h3 class="text-lg font-semibold text-foreground mb-6">Visão geral dos tickets</h3>
     
     <!-- Gráfico Circular Principal -->
     <div class="flex flex-col items-center mb-8">
@@ -46,7 +46,7 @@
         <!-- Texto central -->
         <div class="absolute inset-0 flex flex-col items-center justify-center">
           <div class="text-4xl font-bold text-foreground">{{ displayTotal }}</div>
-          <div class="text-[10px] text-gray-400 uppercase tracking-wide font-medium">PEDIDOS TOTAIS</div>
+          <div class="text-[10px] text-gray-400 uppercase tracking-wide font-medium">TICKETS TOTAIS</div>
         </div>
       </div>
     </div>
@@ -54,8 +54,8 @@
     <!-- Barra de Progresso Mensal -->
     <div>
       <div class="flex justify-between text-sm mb-2">
-        <span class="text-gray-400 uppercase tracking-wide">LIMITE</span>
-        <span class="text-foreground font-medium">{{ monthlyUsed }}/{{ monthlyLimit }}</span>
+        <span class="text-gray-400 uppercase tracking-wide">TICKETS</span>
+        <span class="text-foreground font-medium">{{ displayTotal }}</span>
       </div>
       <div class="relative h-3 bg-muted rounded-full overflow-hidden">
         <div 
@@ -69,7 +69,7 @@
         ></div>
       </div>
       <div class="flex justify-center text-xs text-gray-400 mt-2">
-        <span>O seu plano permite {{ monthlyLimit }} pedidos por mês</span>
+        <span>Tickets atendidos</span>
       </div>
     </div>
   </div>

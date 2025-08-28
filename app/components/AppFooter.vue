@@ -3,7 +3,7 @@
     <div class="text-center">
       <p class="text-sm text-muted-foreground">
         © {{ currentYear }} 
-        <span class="font-medium text-foreground">Agzap Gestão de Pedidos</span>
+        <span class="font-medium text-foreground">WiseDigital Sistemas de Relatórios</span>
         - Todos os direitos reservados
       </p>
     </div>

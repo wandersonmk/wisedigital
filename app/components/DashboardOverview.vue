@@ -2,13 +2,13 @@
   <div class="max-w-7xl mx-auto">
     <!-- Cards de métricas -->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <!-- Card Pedidos Hoje -->
+        <!-- Card Tickets Hoje -->
         <div class="relative bg-gradient-to-br from-card via-blue-950/10 to-card text-card-foreground rounded-lg border border-blue-800/20 shadow-sm hover:shadow-md hover:shadow-blue-500/10 transition-all duration-300 p-6 group overflow-hidden">
           <!-- Efeito de brilho sutil -->
           <div class="absolute inset-0 bg-gradient-to-r from-transparent via-blue-500/8 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
           <div class="relative z-10 flex items-center justify-between">
             <div>
-              <p class="text-sm text-gray-400 mb-1">Pedidos Hoje</p>
+              <p class="text-sm text-gray-400 mb-1">Tickets Hoje</p>
               <p class="text-2xl font-bold text-foreground">{{ metrics.clientesHoje }}</p>
               <p class="text-xs text-blue-600 mt-1">até agora</p>
             </div>
@@ -20,13 +20,13 @@
           </div>
         </div>
 
-        <!-- Card Pedidos na Semana -->
+        <!-- Card Tickets na Semana -->
         <div class="relative bg-gradient-to-br from-card via-emerald-950/10 to-card text-card-foreground rounded-lg border border-emerald-800/20 shadow-sm hover:shadow-md hover:shadow-emerald-500/10 transition-all duration-300 p-6 group overflow-hidden">
           <!-- Efeito de brilho sutil -->
           <div class="absolute inset-0 bg-gradient-to-r from-transparent via-emerald-500/8 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
           <div class="relative z-10 flex items-center justify-between">
             <div>
-              <p class="text-sm text-gray-400 mb-1">Pedidos na Semana</p>
+              <p class="text-sm text-gray-400 mb-1">Tickets na Semana</p>
               <p class="text-2xl font-bold text-foreground">{{ metrics.clientesNovos }}</p>
               <p class="text-xs text-emerald-600 mt-1">nos últimos 7 dias</p>
             </div>
@@ -38,13 +38,13 @@
           </div>
         </div>
 
-        <!-- Card Clientes Novos -->
+        <!-- Card Tickets esse mês -->
         <div class="relative bg-gradient-to-br from-card via-amber-950/10 to-card text-card-foreground rounded-lg border border-amber-800/20 shadow-sm hover:shadow-md hover:shadow-amber-500/10 transition-all duration-300 p-6 group overflow-hidden">
           <!-- Efeito de brilho sutil -->
           <div class="absolute inset-0 bg-gradient-to-r from-transparent via-amber-500/8 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
           <div class="relative z-10 flex items-center justify-between">
             <div>
-              <p class="text-sm text-gray-400 mb-1">Clientes Novos</p>
+              <p class="text-sm text-gray-400 mb-1">Tickets esse mês</p>
               <p class="text-2xl font-bold text-foreground">{{ metrics.clientesVencendo }}</p>
               <p class="text-xs text-green-600 mt-1">este mês</p>
             </div>
