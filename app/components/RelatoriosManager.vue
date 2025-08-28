@@ -228,11 +228,10 @@
         </div>
       </div>
 
-      <!-- Informações de resumo -->
-      <div v-if="relatoriosFiltrados.length > 0" class="mt-6 p-4 bg-muted/50 rounded-lg">
-        <div class="flex items-center justify-between text-sm text-muted-foreground">
-          <span>Total de registros: {{ relatoriosFiltrados.length }}</span>
-          <span v-if="filtrosAplicados">Filtros aplicados</span>
+      <!-- Tabela de relatórios -->
+      <div class="overflow-x-auto">
+        <div style="max-height: 700px; overflow-y: auto;">
+          <!-- ...existing code... -->
         </div>
       </div>
     </div>
