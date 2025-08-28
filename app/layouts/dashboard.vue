@@ -67,6 +67,7 @@ const { signOut } = useAuth()
 // Título dinâmico baseado na rota
 const route = useRoute()
 const pageTitle = computed(() => {
+  console.log('[Dashboard] Current route path:', route.path)
   switch (route.path) {
     case '/':
       return 'Dashboard'
@@ -76,14 +77,18 @@ const pageTitle = computed(() => {
       return 'Cardápio'
     case '/clientes':
       return 'Clientes'
+    case '/relatorios':
+      return 'Relatórios de Tickets'
     case '/ajuste-da-ia':
       return 'Ajuste da IA'
     default:
+      console.log('[Dashboard] Using default title for path:', route.path)
       return 'Dashboard'
   }
 })
 
 const pageDescription = computed(() => {
+  console.log('[Dashboard] Current route path for description:', route.path)
   switch (route.path) {
     case '/':
       return 'Visão geral do sistema'
@@ -93,6 +98,8 @@ const pageDescription = computed(() => {
       return 'Gerencie itens e categorias do cardápio'
     case '/clientes':
       return 'Gerencie todos os seus clientes'
+    case '/relatorios':
+      return 'Gerencie todos os relatórios de chamados'
     case '/ajuste-da-ia':
       return 'Configure as configurações de inteligência artificial'
     default:
