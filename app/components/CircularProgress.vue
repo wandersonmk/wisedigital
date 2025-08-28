@@ -76,8 +76,8 @@
 </template>
 
 <script setup lang="ts">
-// Dados do gráfico de clientes
-const totalClientes = 687
+
+const props = defineProps<{ total: number }>()
 const monthlyLimit = 1000
 const monthlyUsed = 687
 
@@ -87,7 +87,7 @@ const displayTotal = ref(0)
 const monthlyPercentage = ref(0)
 
 // Calcular percentual baseado na meta mensal
-const targetPercentage = Math.round((monthlyUsed / monthlyLimit) * 100)
+const targetPercentage = 100 // sempre 100% para círculo total
 
 // Cálculos do círculo
 const radius = 40
@@ -101,44 +101,44 @@ const strokeDashoffset = computed(() => {
 
 // Função para animar os valores
 const animateProgress = () => {
-  // Animar círculo principal e total de clientes
+  // Animar círculo principal e total de tickets
   const duration1 = 2000
   const startTime1 = Date.now()
-  
+
   const animate1 = () => {
     const elapsed = Date.now() - startTime1
     const progress = Math.min(elapsed / duration1, 1)
     const easeOut = 1 - Math.pow(1 - progress, 3)
-    
+
     currentPercentage.value = easeOut * targetPercentage
-    displayTotal.value = Math.round(easeOut * totalClientes)
-    
+  displayTotal.value = Math.round(easeOut * (typeof props.total === 'number' ? props.total : 0))
+
     if (progress < 1) {
       requestAnimationFrame(animate1)
     }
   }
-  
+
   // Animar barra mensal (com delay)
   setTimeout(() => {
     const duration2 = 2000
     const startTime2 = Date.now()
     const targetMonthly = (monthlyUsed / monthlyLimit) * 100
-    
+
     const animate2 = () => {
       const elapsed = Date.now() - startTime2
       const progress = Math.min(elapsed / duration2, 1)
       const easeOut = 1 - Math.pow(1 - progress, 3)
-      
+
       monthlyPercentage.value = easeOut * targetMonthly
-      
+
       if (progress < 1) {
         requestAnimationFrame(animate2)
       }
     }
-    
+
     animate2()
   }, 800)
-  
+
   animate1()
 }
 

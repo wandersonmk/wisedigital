@@ -56,19 +56,19 @@
           </div>
         </div>
 
-        <!-- Card Total de Clientes -->
-        <div class="relative bg-gradient-to-br from-card via-purple-950/10 to-card text-card-foreground rounded-lg border border-purple-800/20 shadow-sm hover:shadow-md hover:shadow-purple-500/10 transition-all duration-300 p-6 group overflow-hidden">
+        <!-- Card Tickets Totais -->
+        <div class="relative bg-gradient-to-br from-card via-indigo-950/10 to-card text-card-foreground rounded-lg border border-indigo-800/20 shadow-sm hover:shadow-md hover:shadow-indigo-500/10 transition-all duration-300 p-6 group overflow-hidden">
           <!-- Efeito de brilho sutil -->
-          <div class="absolute inset-0 bg-gradient-to-r from-transparent via-purple-500/8 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+          <div class="absolute inset-0 bg-gradient-to-r from-transparent via-indigo-500/8 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
           <div class="relative z-10 flex items-center justify-between">
             <div>
-              <p class="text-sm text-gray-400 mb-1">Total de Clientes</p>
-              <p class="text-2xl font-bold text-foreground">{{ metrics.faturamento.toLocaleString('pt-BR') }}</p>
-              <p class="text-xs text-purple-600 mt-1">cadastrados</p>
+              <p class="text-sm text-gray-400 mb-1">Tickets Totais</p>
+              <p class="text-2xl font-bold text-foreground">{{ metrics.ticketsTotais.toLocaleString('pt-BR') }}</p>
+              <p class="text-xs text-indigo-600 mt-1">total de tickets</p>
             </div>
-            <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center shadow-lg">
+            <div class="w-12 h-12 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-lg flex items-center justify-center shadow-lg">
               <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2a4 4 0 014-4h2a4 4 0 014 4v2a4 4 0 01-4 4h-2a4 4 0 01-4-4z"/>
               </svg>
             </div>
           </div>
@@ -77,8 +77,8 @@
 
     <!-- Gráficos -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      <!-- Gráfico de Performance Circular -->
-      <CircularProgress />
+  <!-- Gráfico de Performance Circular -->
+  <CircularProgress :total="metrics.ticketsTotais" />
 
       <!-- Gráfico de Vendas Mensais -->
       <div class="bg-card text-card-foreground rounded-lg border border-border shadow-sm p-6">
@@ -101,8 +101,20 @@ const metrics = ref({
   clientesHoje: 0,
   clientesNovos: 0,
   clientesVencendo: 0,
-  faturamento: 0
+  faturamento: 0,
+  ticketsTotais: 0
 })
+// Buscar total de tickets na tabela relatorios
+async function fetchTicketsTotais() {
+  if (!process.client) return
+  const supabase = useSupabaseClient()
+  const { count, error } = await supabase
+    .from('relatorios')
+    .select('id', { count: 'exact', head: true })
+  if (!error && typeof count === 'number') {
+    metrics.value.ticketsTotais = count
+  }
+}
 // Buscar total de clientes na tabela clientes
 async function fetchTotalClientes() {
   if (!process.client) return
@@ -177,6 +189,7 @@ onMounted(() => {
     fetchTicketsSemana()
     fetchTicketsMes()
     fetchTotalClientes()
+    fetchTicketsTotais()
   })
 })
 
