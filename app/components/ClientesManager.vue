@@ -5,6 +5,9 @@
       <div>
         <h2 class="text-xl font-semibold text-foreground">Lista de Clientes</h2>
         <p class="text-sm text-muted-foreground mt-1">Gerencie todos os seus clientes</p>
+        <p v-if="clientes && clientes.length > 0" class="text-xs text-muted-foreground mt-1">
+          Total de clientes: <span class="font-semibold text-primary">{{ clientes.length }}</span>
+        </p>
       </div>
       
       <!-- Botões de exportação -->
