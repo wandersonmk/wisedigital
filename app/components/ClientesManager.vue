@@ -327,9 +327,138 @@ async function exportToPDF() {
 }
 
 // Função para exportar para Excel
-function exportToExcel() {
-  console.log('Exportando para Excel...')
-  // TODO: Implementar exportação para Excel
+async function exportToExcel() {
+  // Verificar se estamos no cliente
+  if (typeof window === 'undefined') {
+    console.warn('Exportação Excel só funciona no cliente')
+    return
+  }
+
+  try {
+    // Importação dinâmica para evitar problemas com SSR
+    const XLSX = await import('xlsx')
+    
+    // Data de geração
+    const agora = new Date()
+    const dataFormatada = agora.toLocaleDateString('pt-BR', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    })
+    
+    // Preparar dados completos para o Excel
+    const dadosCompletos = [
+      // Informações do cabeçalho
+      ['Wise Digital - Sistema de Relatórios'],
+      ['Lista de Clientes'],
+      [`Gerado em: ${dataFormatada}`],
+      [`Total de clientes: ${clientes.value.length}`],
+      [], // Linha vazia
+      // Cabeçalho da tabela
+      ['#', 'Nome', 'Telefone', 'Empresa']
+    ]
+    
+    // Adicionar dados dos clientes
+    clientes.value.forEach((cliente, index) => {
+      dadosCompletos.push([
+        (index + 1).toString(),
+        cliente.nome,
+        cliente.telefone,
+        cliente.empresa
+      ])
+    })
+    
+    // Criar workbook e worksheet
+    const workbook = XLSX.utils.book_new()
+    const worksheet = XLSX.utils.aoa_to_sheet(dadosCompletos)
+    
+    // Configurar largura das colunas
+    const columnWidths = [
+      { wch: 5 },  // # (número)
+      { wch: 25 }, // Nome
+      { wch: 18 }, // Telefone
+      { wch: 15 }  // Empresa
+    ]
+    worksheet['!cols'] = columnWidths
+    
+    // Mesclar células do cabeçalho
+    worksheet['!merges'] = [
+      { s: { r: 0, c: 0 }, e: { r: 0, c: 3 } }, // Título principal
+      { s: { r: 1, c: 0 }, e: { r: 1, c: 3 } }, // Subtítulo
+      { s: { r: 2, c: 0 }, e: { r: 2, c: 3 } }, // Data
+      { s: { r: 3, c: 0 }, e: { r: 3, c: 3 } }, // Total
+    ]
+    
+    // Estilizar células específicas (título, cabeçalho da tabela)
+    const range = XLSX.utils.decode_range(worksheet['!ref'] || 'A1')
+    
+    // Estilo do título principal (linha 1)
+    if (worksheet['A1']) {
+      worksheet['A1'].s = {
+        font: { bold: true, size: 14, color: { rgb: "4F46E5" } },
+        alignment: { horizontal: "center" }
+      }
+    }
+    
+    // Estilo do subtítulo (linha 2)
+    if (worksheet['A2']) {
+      worksheet['A2'].s = {
+        font: { bold: true, size: 12 },
+        alignment: { horizontal: "center" }
+      }
+    }
+    
+    // Estilizar cabeçalho da tabela (linha 6 - índice 5)
+    for (let col = 0; col < 4; col++) {
+      const cellAddress = XLSX.utils.encode_cell({ r: 5, c: col })
+      if (worksheet[cellAddress]) {
+        worksheet[cellAddress].s = {
+          font: { bold: true, color: { rgb: "FFFFFF" } },
+          fill: { fgColor: { rgb: "4F46E5" } }, // Indigo-600
+          alignment: { horizontal: "center" },
+          border: {
+            top: { style: "thin", color: { rgb: "000000" } },
+            bottom: { style: "thin", color: { rgb: "000000" } },
+            left: { style: "thin", color: { rgb: "000000" } },
+            right: { style: "thin", color: { rgb: "000000" } }
+          }
+        }
+      }
+    }
+    
+    // Estilizar dados da tabela (a partir da linha 7)
+    for (let row = 6; row < dadosCompletos.length; row++) {
+      for (let col = 0; col < 4; col++) {
+        const cellAddress = XLSX.utils.encode_cell({ r: row, c: col })
+        if (worksheet[cellAddress]) {
+          worksheet[cellAddress].s = {
+            border: {
+              top: { style: "thin", color: { rgb: "CCCCCC" } },
+              bottom: { style: "thin", color: { rgb: "CCCCCC" } },
+              left: { style: "thin", color: { rgb: "CCCCCC" } },
+              right: { style: "thin", color: { rgb: "CCCCCC" } }
+            },
+            alignment: { horizontal: col === 0 ? "center" : "left" } // Centralizar apenas o número
+          }
+        }
+      }
+    }
+    
+    // Adicionar worksheet ao workbook
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Clientes')
+    
+    // Salvar o arquivo
+    const nomeArquivo = `clientes_${agora.toISOString().split('T')[0]}.xlsx`
+    XLSX.writeFile(workbook, nomeArquivo)
+    
+    console.log('Excel exportado com sucesso!')
+    
+  } catch (error) {
+    console.error('Erro ao exportar Excel:', error)
+    alert('Erro ao gerar o arquivo Excel. Tente novamente.')
+  }
 }
 
 // Função para abrir WhatsApp
