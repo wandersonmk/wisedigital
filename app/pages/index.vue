@@ -7,7 +7,7 @@ definePageMeta({
 
 // Estado de carregamento
 const isLoading = ref(true)
-const { isLoading: authLoading } = useAuth()
+const { isLoading: authLoading } = process.client ? useAuth() : { isLoading: ref(false) }
 
 // Aguarda a autenticação ser carregada e adiciona um delay mínimo para UX
 onMounted(async () => {
