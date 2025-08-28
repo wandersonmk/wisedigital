@@ -192,10 +192,17 @@ function confirmarLimpezaTickets() {
 // Função para limpar clientes (placeholder - sem ação de banco ainda)
 async function limparClientes() {
   try {
-    const { error } = await supabase.from('clientes').delete().neq('id', '')
-    if (error) throw error
+    // Buscar todos os IDs dos clientes
+    const { data, error: selectError } = await supabase.from('clientes').select('id')
+    if (selectError) throw selectError
+    if (data && data.length) {
+      const { error: deleteError } = await supabase.from('clientes').delete().in('id', data.map(c => c.id))
+      if (deleteError) throw deleteError
+      alert('Todos os clientes foram removidos com sucesso!')
+    } else {
+      alert('Nenhum cliente para remover.')
+    }
     mostrarModalClientes.value = false
-    alert('Todos os clientes foram removidos com sucesso!')
   } catch (err) {
     alert('Erro ao limpar clientes: ' + String(err))
   }
@@ -203,10 +210,24 @@ async function limparClientes() {
 
 // Função para limpar tickets (placeholder - sem ação de banco ainda)
 function limparTickets() {
-  console.log('🗑️ [Configurações] Limpeza de tickets solicitada (placeholder)')
-  
-  // Fechar modal
-  mostrarModalTickets.value = false
+  // Limpar todos os relatórios da tabela 'relatorios'
+  (async () => {
+    try {
+      const { data, error: selectError } = await supabase.from('relatorios').select('id')
+      if (selectError) throw selectError
+      if (data && data.length) {
+        const { error: deleteError } = await supabase.from('relatorios').delete().in('id', data.map(r => r.id))
+        if (deleteError) throw deleteError
+        alert('Todos os relatórios foram removidos com sucesso!')
+      } else {
+        alert('Nenhum relatório para remover.')
+      }
+      mostrarModalTickets.value = false
+    } catch (err) {
+      alert('Erro ao limpar relatórios: ' + String(err))
+      mostrarModalTickets.value = false
+    }
+  })();
   
   // Aqui futuramente será implementada a lógica de limpeza do banco
   alert('Funcionalidade de limpeza de tickets será implementada em breve.')
