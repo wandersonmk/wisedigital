@@ -96,8 +96,39 @@
 
     <!-- Lista de relatórios -->
     <div class="p-6">
+      <!-- Loading state -->
+      <div v-if="isLoading" class="text-center py-8">
+        <div class="flex flex-col items-center">
+          <div class="w-12 h-12 mx-auto mb-4 bg-muted rounded-full flex items-center justify-center">
+            <svg class="w-6 h-6 text-muted-foreground animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+            </svg>
+          </div>
+          <h3 class="text-lg font-medium text-foreground mb-2">Carregando relatórios...</h3>
+          <p class="text-muted-foreground">Aguarde um momento</p>
+        </div>
+      </div>
+
+      <!-- Error state -->
+      <div v-else-if="error" class="text-center py-8">
+        <div class="flex flex-col items-center">
+          <font-awesome-icon 
+            icon="exclamation-triangle" 
+            class="w-12 h-12 text-red-500 mb-4" 
+          />
+          <h3 class="text-lg font-medium text-foreground mb-2">Erro ao carregar relatórios</h3>
+          <p class="text-muted-foreground mb-4">{{ error }}</p>
+          <button
+            @click="recarregarRelatorios"
+            class="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
+          >
+            Tentar novamente
+          </button>
+        </div>
+      </div>
+
       <!-- Mensagem quando não há relatórios -->
-      <div v-if="relatoriosFiltrados.length === 0" class="text-center py-8">
+      <div v-else-if="relatoriosFiltrados.length === 0" class="text-center py-8">
         <div class="flex flex-col items-center">
           <font-awesome-icon 
             icon="file-alt" 
@@ -138,7 +169,7 @@
                   <div class="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center mr-3">
                     <font-awesome-icon icon="user" class="w-4 h-4 text-primary" />
                   </div>
-                  <span class="font-medium text-foreground">{{ relatorio.nomePessoa }}</span>
+                  <span class="font-medium text-foreground">{{ relatorio.nome_pessoa }}</span>
                 </div>
               </td>
               
@@ -149,7 +180,7 @@
               
               <!-- Nome da loja -->
               <td class="py-4 px-4">
-                <span class="text-foreground font-medium">{{ relatorio.nomeLoja }}</span>
+                <span class="text-foreground font-medium">{{ relatorio.nome_loja }}</span>
               </td>
               
               <!-- CNPJ -->
@@ -160,21 +191,21 @@
               <!-- Data e Hora -->
               <td class="py-4 px-4">
                 <div class="text-sm">
-                  <div class="font-medium text-foreground">{{ relatorio.dataAbertura }}</div>
-                  <div class="text-muted-foreground">{{ relatorio.horaAbertura }}</div>
+                  <div class="font-medium text-foreground">{{ relatorio.data_abertura_chamado }}</div>
+                  <div class="text-muted-foreground">{{ relatorio.hora_abertura_chamado }}</div>
                 </div>
               </td>
               
               <!-- Motivo -->
               <td class="py-4 px-4">
-                <span class="text-foreground text-sm">{{ relatorio.motivoChamado }}</span>
+                <span class="text-foreground text-sm">{{ relatorio.motivo_chamado }}</span>
               </td>
               
               <!-- Empresa -->
               <td class="py-4 px-4">
                 <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium"
-                      :class="getEmpresaClass(relatorio.empresa)">
-                  {{ relatorio.empresa }}
+                      :class="getEmpresaClass(relatorio.nome_empresa)">
+                  {{ relatorio.nome_empresa }}
                 </span>
               </td>
             </tr>
@@ -194,19 +225,18 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-
-// Interface para tipagem do relatório
+// Interface para relatório
 interface Relatorio {
   id: string
-  nomePessoa: string
+  nome_pessoa: string
   telefone: string
-  nomeLoja: string
+  nome_loja: string
   cnpj: string
-  dataAbertura: string
-  horaAbertura: string
-  motivoChamado: string
-  empresa: string
+  nome_empresa: string
+  data_abertura_chamado: string
+  hora_abertura_chamado: string
+  motivo_chamado: string
+  created_at: string
 }
 
 // Interface para filtros
@@ -217,12 +247,26 @@ interface Filtros {
   empresa: string
 }
 
+// Usar o composable de relatórios
+const { 
+  relatorios: relatoriosData, 
+  isLoading, 
+  error, 
+  fetchRelatorios, 
+  clearError 
+} = useRelatorios()
+
 // Estados reativos
 const filtros = ref<Filtros>({
   dataInicial: '',
   dataFinal: '',
   lojaOuCnpj: '',
   empresa: ''
+})
+
+// Carregar relatórios quando o componente for montado
+onMounted(() => {
+  fetchRelatorios()
 })
 
 // Computed para detectar se há filtros ativos automaticamente
@@ -233,72 +277,14 @@ const filtrosAplicados = computed(() => {
          filtros.value.empresa !== ''
 })
 
-// Dados de exemplo (substituir pela busca real do banco futuramente)
-const relatorios = ref<Relatorio[]>([
-  {
-    id: '1',
-    nomePessoa: 'João Silva',
-    telefone: '(11) 99999-9999',
-    nomeLoja: 'Loja Centro',
-    cnpj: '12.345.678/0001-90',
-    dataAbertura: '28/08/2025',
-    horaAbertura: '09:30',
-    motivoChamado: 'Problema na internet',
-    empresa: 'VIVO'
-  },
-  {
-    id: '2',
-    nomePessoa: 'Maria Santos',
-    telefone: '(11) 88888-8888',
-    nomeLoja: 'Loja Shopping',
-    cnpj: '98.765.432/0001-10',
-    dataAbertura: '27/08/2025',
-    horaAbertura: '14:15',
-    motivoChamado: 'Lentidão no sistema',
-    empresa: 'TIM'
-  },
-  {
-    id: '3',
-    nomePessoa: 'Pedro Oliveira',
-    telefone: '(11) 77777-7777',
-    nomeLoja: 'Loja Vila Nova',
-    cnpj: '11.222.333/0001-44',
-    dataAbertura: '26/08/2025',
-    horaAbertura: '16:45',
-    motivoChamado: 'Sistema fora do ar',
-    empresa: 'CLARO'
-  },
-  {
-    id: '4',
-    nomePessoa: 'Ana Costa',
-    telefone: '(11) 66666-6666',
-    nomeLoja: 'Loja Matriz',
-    cnpj: '55.666.777/0001-88',
-    dataAbertura: '25/08/2025',
-    horaAbertura: '11:20',
-    motivoChamado: 'Erro no PDV',
-    empresa: 'OI'
-  },
-  {
-    id: '5',
-    nomePessoa: 'Carlos Mendes',
-    telefone: '(11) 55555-5555',
-    nomeLoja: 'Loja Outlet',
-    cnpj: '33.444.555/0001-66',
-    dataAbertura: '24/08/2025',
-    horaAbertura: '08:45',
-    motivoChamado: 'Conexão instável',
-    empresa: 'VIVO'
-  }
-])
-
 // Computed para relatórios filtrados
 const relatoriosFiltrados = computed(() => {
-  let resultado = relatorios.value
+  let resultado = relatoriosData.value
 
   if (filtros.value.dataInicial) {
     resultado = resultado.filter(r => {
-      const dataRelatorio = new Date(r.dataAbertura.split('/').reverse().join('-'))
+      // Converter data do formato DD/MM/YYYY para comparação
+      const dataRelatorio = new Date(r.data_abertura_chamado.split('/').reverse().join('-'))
       const dataFiltro = new Date(filtros.value.dataInicial)
       return dataRelatorio >= dataFiltro
     })
@@ -306,7 +292,7 @@ const relatoriosFiltrados = computed(() => {
 
   if (filtros.value.dataFinal) {
     resultado = resultado.filter(r => {
-      const dataRelatorio = new Date(r.dataAbertura.split('/').reverse().join('-'))
+      const dataRelatorio = new Date(r.data_abertura_chamado.split('/').reverse().join('-'))
       const dataFiltro = new Date(filtros.value.dataFinal)
       return dataRelatorio <= dataFiltro
     })
@@ -315,17 +301,23 @@ const relatoriosFiltrados = computed(() => {
   if (filtros.value.lojaOuCnpj) {
     const termo = filtros.value.lojaOuCnpj.toLowerCase()
     resultado = resultado.filter(r => 
-      r.nomeLoja.toLowerCase().includes(termo) || 
+      r.nome_loja.toLowerCase().includes(termo) || 
       r.cnpj.toLowerCase().includes(termo)
     )
   }
 
   if (filtros.value.empresa) {
-    resultado = resultado.filter(r => r.empresa === filtros.value.empresa)
+    resultado = resultado.filter(r => r.nome_empresa === filtros.value.empresa)
   }
 
   return resultado
 })
+
+// Função para recarregar relatórios
+const recarregarRelatorios = () => {
+  clearError()
+  fetchRelatorios()
+}
 
 // Função para limpar filtros
 function limparFiltros() {
@@ -414,13 +406,13 @@ async function exportToPDF() {
     // Preparar dados para a tabela
     const tableData = relatoriosFiltrados.value.map((relatorio, index) => [
       (index + 1).toString(),
-      relatorio.nomePessoa,
+      relatorio.nome_pessoa,
       relatorio.telefone,
-      relatorio.nomeLoja,
+      relatorio.nome_loja,
       relatorio.cnpj,
-      `${relatorio.dataAbertura} ${relatorio.horaAbertura}`,
-      relatorio.motivoChamado,
-      relatorio.empresa
+      `${relatorio.data_abertura_chamado} ${relatorio.hora_abertura_chamado}`,
+      relatorio.motivo_chamado,
+      relatorio.nome_empresa
     ])
     
     // Configurar tabela
@@ -525,14 +517,14 @@ async function exportToExcel() {
     relatoriosFiltrados.value.forEach((relatorio, index) => {
       dadosCompletos.push([
         (index + 1).toString(),
-        relatorio.nomePessoa,
+        relatorio.nome_pessoa,
         relatorio.telefone,
-        relatorio.nomeLoja,
+        relatorio.nome_loja,
         relatorio.cnpj,
-        relatorio.dataAbertura,
-        relatorio.horaAbertura,
-        relatorio.motivoChamado,
-        relatorio.empresa
+        relatorio.data_abertura_chamado,
+        relatorio.hora_abertura_chamado,
+        relatorio.motivo_chamado,
+        relatorio.nome_empresa
       ])
     })
     
