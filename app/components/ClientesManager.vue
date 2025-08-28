@@ -192,8 +192,12 @@ const {
   isLoading, 
   error, 
   fetchClientes, 
+  deleteCliente,
   clearError 
 } = useClientes()
+
+// Estado para modal de confirmação de exclusão
+const clienteParaExcluir = ref<any>(null)
 
 // Carregar clientes quando o componente for montado
 onMounted(() => {
@@ -206,50 +210,136 @@ const recarregarClientes = () => {
   fetchClientes()
 }
 
+// Função para confirmar exclusão
+const confirmarExclusao = (cliente: any) => {
+  clienteParaExcluir.value = cliente
+}
+
+// Função para cancelar exclusão
+const cancelarExclusao = () => {
+  clienteParaExcluir.value = null
+}
+
+// Função para excluir cliente
+const excluirCliente = async () => {
+  if (clienteParaExcluir.value) {
+    await deleteCliente(clienteParaExcluir.value.id)
+    clienteParaExcluir.value = null
+    await fetchClientes() // Recarregar lista
+  }
+}
+
+// Função para abrir WhatsApp
+const abrirWhatsApp = (cliente: any) => {
+  const numeroLimpo = cliente.telefone.replace(/\D/g, '')
+  const url = `https://wa.me/55${numeroLimpo}`
+  window.open(url, '_blank')
+}
+
 // Função para exportar para PDF
 const exportToPDF = async () => {
   try {
     const { jsPDF } = await import('jspdf')
     const doc = new jsPDF()
 
-    // Título
-    doc.setFontSize(20)
-    doc.text('Lista de Clientes', 20, 20)
+    // Header com fundo roxo
+    doc.setFillColor(102, 90, 228) // Cor roxa (RGB: 102, 90, 228)
+    doc.rect(0, 0, 210, 45, 'F') // Retângulo roxo no topo
 
-    // Data de geração
+    // Título principal
+    doc.setTextColor(255, 255, 255) // Texto branco
+    doc.setFontSize(24)
+    doc.setFont('helvetica', 'bold')
+    doc.text('Wise Digital', 20, 20)
+
+    // Subtítulo
+    doc.setFontSize(14)
+    doc.setFont('helvetica', 'normal')
+    doc.text('Sistema de Relatórios', 20, 35)
+
+    // Resetar cor do texto para preto
+    doc.setTextColor(0, 0, 0)
+
+    // Título da seção
+    doc.setFontSize(18)
+    doc.setFont('helvetica', 'bold')
+    doc.text('Lista de Clientes', 20, 65)
+
+    // Informações de geração
     doc.setFontSize(10)
-    doc.text(`Gerado em: ${new Date().toLocaleDateString('pt-BR')} às ${new Date().toLocaleTimeString('pt-BR')}`, 20, 30)
+    doc.setFont('helvetica', 'normal')
+    const agora = new Date()
+    const dataFormatada = agora.toLocaleDateString('pt-BR', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric'
+    })
+    const horaFormatada = agora.toLocaleTimeString('pt-BR', {
+      hour: '2-digit',
+      minute: '2-digit'
+    })
+    doc.text(`Gerado em: ${dataFormatada}, ${horaFormatada}`, 20, 75)
+    doc.text(`Total de clientes: ${clientes.value.length}`, 20, 85)
 
-    // Cabeçalho da tabela
-    let yPosition = 50
+    // Cabeçalho da tabela com fundo roxo
+    let yPosition = 100
+    doc.setFillColor(102, 90, 228) // Cor roxa para cabeçalho
+    doc.rect(20, yPosition - 10, 170, 15, 'F') // Retângulo roxo para cabeçalho
+
+    // Texto do cabeçalho em branco
+    doc.setTextColor(255, 255, 255)
     doc.setFontSize(12)
-    doc.text('Nome', 20, yPosition)
-    doc.text('Telefone', 80, yPosition)
-    doc.text('Empresa', 130, yPosition)
-    doc.text('Data', 170, yPosition)
+    doc.setFont('helvetica', 'bold')
+    doc.text('#', 25, yPosition - 2)
+    doc.text('Nome', 40, yPosition - 2)
+    doc.text('Telefone', 100, yPosition - 2)
+    doc.text('Empresa', 150, yPosition - 2)
 
-    // Linha separadora
-    yPosition += 5
-    doc.line(20, yPosition, 190, yPosition)
+    // Resetar cor do texto para preto
+    doc.setTextColor(0, 0, 0)
     yPosition += 10
 
     // Dados dos clientes
     doc.setFontSize(10)
-    clientes.value.forEach((cliente) => {
+    doc.setFont('helvetica', 'normal')
+    clientes.value.forEach((cliente, index) => {
       if (yPosition > 270) {
         doc.addPage()
         yPosition = 20
+        
+        // Repetir cabeçalho na nova página
+        doc.setFillColor(102, 90, 228)
+        doc.rect(20, yPosition - 10, 170, 15, 'F')
+        doc.setTextColor(255, 255, 255)
+        doc.setFontSize(12)
+        doc.setFont('helvetica', 'bold')
+        doc.text('#', 25, yPosition - 2)
+        doc.text('Nome', 40, yPosition - 2)
+        doc.text('Telefone', 100, yPosition - 2)
+        doc.text('Empresa', 150, yPosition - 2)
+        doc.setTextColor(0, 0, 0)
+        doc.setFontSize(10)
+        doc.setFont('helvetica', 'normal')
+        yPosition += 10
       }
 
-      doc.text(cliente.nome, 20, yPosition)
-      doc.text(cliente.telefone, 80, yPosition)
-      doc.text(cliente.empresa || 'Não informado', 130, yPosition)
-      doc.text(new Date(cliente.created_at).toLocaleDateString('pt-BR'), 170, yPosition)
-      yPosition += 15
+      // Cor de fundo alternada para as linhas
+      if (index % 2 === 0) {
+        doc.setFillColor(249, 250, 251) // Cinza claro
+        doc.rect(20, yPosition - 8, 170, 12, 'F')
+      }
+
+      // Dados da linha
+      doc.text((index + 1).toString(), 25, yPosition)
+      doc.text(cliente.nome, 40, yPosition)
+      doc.text(cliente.telefone, 100, yPosition)
+      doc.text(cliente.empresa || 'Não informado', 150, yPosition)
+      
+      yPosition += 12
     })
 
     // Salvar o PDF
-    doc.save('clientes.pdf')
+    doc.save('lista-clientes.pdf')
   } catch (error) {
     console.error('Erro ao exportar PDF:', error)
     alert('Erro ao exportar PDF. Tente novamente.')
