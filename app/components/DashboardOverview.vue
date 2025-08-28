@@ -100,9 +100,21 @@ const lineChartRef = ref<HTMLCanvasElement | null>(null)
 const metrics = ref({
   clientesHoje: 0,
   clientesNovos: 0,
-  clientesVencendo: 12,
-  faturamento: 3250
+  clientesVencendo: 0,
+  faturamento: 0
 })
+// Buscar total de clientes na tabela clientes
+async function fetchTotalClientes() {
+  if (!process.client) return
+  const supabase = useSupabaseClient()
+  const { count, error } = await supabase
+    .from('clientes')
+    .select('id', { count: 'exact', head: true })
+  if (!error && typeof count === 'number') {
+    metrics.value.faturamento = count
+  }
+}
+
 
 // Buscar quantidade de tickets de hoje na tabela relatorios
 async function fetchTicketsHoje() {
@@ -141,11 +153,30 @@ async function fetchTicketsSemana() {
   metrics.value.clientesNovos = ticketsSemana?.length || 0;
 }
 
+// Buscar quantidade de tickets do mês atual na tabela relatorios
+async function fetchTicketsMes() {
+  if (!process.client) return
+  const supabase = useSupabaseClient()
+  const now = new Date()
+  const firstDay = new Date(now.getFullYear(), now.getMonth(), 1)
+  const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0)
+  firstDay.setHours(0, 0, 0, 0)
+  lastDay.setHours(23, 59, 59, 999)
+  const { data: ticketsMes, error: errorMes } = await supabase
+    .from('relatorios')
+    .select('id')
+    .gte('created_at', firstDay.toISOString())
+    .lte('created_at', lastDay.toISOString())
+  metrics.value.clientesVencendo = ticketsMes?.length || 0
+}
+
 onMounted(() => {
   nextTick(() => {
     createLineChart()
     fetchTicketsHoje()
     fetchTicketsSemana()
+    fetchTicketsMes()
+    fetchTotalClientes()
   })
 })
 
