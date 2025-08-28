@@ -214,35 +214,6 @@
         </div>
       </div>
 
-      <!-- Seção: Suporte -->
-      <div class="space-y-4">
-        <div class="flex items-center space-x-3 mb-4">
-          <div class="w-8 h-8 bg-blue-100 dark:bg-blue-900/20 rounded-lg flex items-center justify-center">
-            <font-awesome-icon 
-              icon="life-ring" 
-              class="w-4 h-4 text-blue-600 dark:text-blue-400" 
-            />
-          </div>
-          <h3 class="text-xl font-semibold text-foreground">Precisa de Mais Ajuda?</h3>
-        </div>
-        
-        <div class="bg-blue-50 dark:bg-blue-900/10 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
-          <p class="text-sm text-blue-700 dark:text-blue-300 mb-3">
-            Se você ainda tem dúvidas ou encontrou algum problema não abordado neste guia, nossa equipe está pronta para ajudar.
-          </p>
-          <div class="flex items-center space-x-4 text-sm">
-            <div class="flex items-center space-x-2 text-blue-600 dark:text-blue-400">
-              <font-awesome-icon icon="phone" class="w-4 h-4" />
-              <span>Suporte Técnico</span>
-            </div>
-            <div class="flex items-center space-x-2 text-blue-600 dark:text-blue-400">
-              <font-awesome-icon icon="comments" class="w-4 h-4" />
-              <span>Chat Online</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
     </div>
   </div>
 </template>
