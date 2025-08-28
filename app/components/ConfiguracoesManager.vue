@@ -172,6 +172,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useSupabaseClient } from '../composables/useSupabaseClient'
+import { useToastSafe } from '../composables/useToastSafe'
 
 const supabase = useSupabaseClient()
 
@@ -191,6 +192,7 @@ function confirmarLimpezaTickets() {
 
 // Função para limpar clientes (placeholder - sem ação de banco ainda)
 async function limparClientes() {
+  const toast = await useToastSafe();
   try {
     // Buscar todos os IDs dos clientes
     const { data, error: selectError } = await supabase.from('clientes').select('id')
@@ -198,38 +200,33 @@ async function limparClientes() {
     if (data && data.length) {
       const { error: deleteError } = await supabase.from('clientes').delete().in('id', data.map(c => c.id))
       if (deleteError) throw deleteError
-      alert('Todos os clientes foram removidos com sucesso!')
+      toast?.success('Todos os clientes foram removidos com sucesso!')
     } else {
-      alert('Nenhum cliente para remover.')
+      toast?.info('Nenhum cliente para remover.')
     }
     mostrarModalClientes.value = false
   } catch (err) {
-    alert('Erro ao limpar clientes: ' + String(err))
+    toast?.error('Erro ao limpar clientes: ' + String(err))
   }
 }
 
 // Função para limpar tickets (placeholder - sem ação de banco ainda)
-function limparTickets() {
-  // Limpar todos os relatórios da tabela 'relatorios'
-  (async () => {
-    try {
-      const { data, error: selectError } = await supabase.from('relatorios').select('id')
-      if (selectError) throw selectError
-      if (data && data.length) {
-        const { error: deleteError } = await supabase.from('relatorios').delete().in('id', data.map(r => r.id))
-        if (deleteError) throw deleteError
-        alert('Todos os relatórios foram removidos com sucesso!')
-      } else {
-        alert('Nenhum relatório para remover.')
-      }
-      mostrarModalTickets.value = false
-    } catch (err) {
-      alert('Erro ao limpar relatórios: ' + String(err))
-      mostrarModalTickets.value = false
+async function limparTickets() {
+  const toast = await useToastSafe();
+  try {
+    const { data, error: selectError } = await supabase.from('relatorios').select('id')
+    if (selectError) throw selectError
+    if (data && data.length) {
+      const { error: deleteError } = await supabase.from('relatorios').delete().in('id', data.map(r => r.id))
+      if (deleteError) throw deleteError
+      toast?.success('Todos os relatórios foram removidos com sucesso!')
+    } else {
+      toast?.info('Nenhum relatório para remover.')
     }
-  })();
-  
-  // Aqui futuramente será implementada a lógica de limpeza do banco
-  alert('Funcionalidade de limpeza de tickets será implementada em breve.')
+    mostrarModalTickets.value = false
+  } catch (err) {
+    toast?.error('Erro ao limpar relatórios: ' + String(err))
+    mostrarModalTickets.value = false
+  }
 }
 </script>
