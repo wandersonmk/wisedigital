@@ -403,6 +403,48 @@ async function exportToPDF() {
     doc.text(`Gerado em: ${dataFormatada}`, 20, 65)
     doc.text(`Total de registros: ${relatoriosFiltrados.value.length}`, 20, 72)
     
+    // Mostrar filtros aplicados se houver
+    let yPosicaoAtual = 72
+    if (filtrosAplicados.value) {
+      yPosicaoAtual += 10
+      doc.setFontSize(10)
+      doc.setFont('helvetica', 'bold')
+      doc.setTextColor(79, 70, 229) // Cor primária
+      doc.text('Filtros Aplicados:', 20, yPosicaoAtual)
+      
+      doc.setFont('helvetica', 'normal')
+      doc.setTextColor(107, 114, 128)
+      yPosicaoAtual += 7
+      
+      if (filtros.value.dataInicial && filtros.value.dataFinal) {
+        const dataIni = new Date(filtros.value.dataInicial).toLocaleDateString('pt-BR')
+        const dataFim = new Date(filtros.value.dataFinal).toLocaleDateString('pt-BR')
+        doc.text(`• Período: ${dataIni} até ${dataFim}`, 20, yPosicaoAtual)
+        yPosicaoAtual += 7
+      } else if (filtros.value.dataInicial) {
+        const dataIni = new Date(filtros.value.dataInicial).toLocaleDateString('pt-BR')
+        doc.text(`• Data inicial: ${dataIni}`, 20, yPosicaoAtual)
+        yPosicaoAtual += 7
+      } else if (filtros.value.dataFinal) {
+        const dataFim = new Date(filtros.value.dataFinal).toLocaleDateString('pt-BR')
+        doc.text(`• Data final: ${dataFim}`, 20, yPosicaoAtual)
+        yPosicaoAtual += 7
+      }
+      
+      if (filtros.value.empresa) {
+        doc.text(`• Empresa: ${filtros.value.empresa}`, 20, yPosicaoAtual)
+        yPosicaoAtual += 7
+      }
+      
+      if (filtros.value.lojaOuCnpj) {
+        doc.text(`• Loja/CNPJ: ${filtros.value.lojaOuCnpj}`, 20, yPosicaoAtual)
+        yPosicaoAtual += 7
+      }
+    }
+    
+    // Ajustar posição Y da tabela baseado nos filtros
+    const startYTabela = yPosicaoAtual + 15
+    
     // Preparar dados para a tabela
     const tableData = relatoriosFiltrados.value.map((relatorio, index) => [
       (index + 1).toString(),
@@ -419,7 +461,7 @@ async function exportToPDF() {
     autoTable(doc, {
       head: [['#', 'Nome', 'Telefone', 'Loja', 'CNPJ', 'Data/Hora', 'Motivo', 'Empresa']],
       body: tableData,
-      startY: 85,
+      startY: startYTabela,
       theme: 'grid',
       styles: {
         font: 'helvetica',
@@ -507,11 +549,38 @@ async function exportToExcel() {
       ['Wise Digital - Sistema de Relatórios'],
       ['Relatórios de Tickets'],
       [`Gerado em: ${dataFormatada}`],
-      [`Total de registros: ${relatoriosFiltrados.value.length}`],
-      [], // Linha vazia
-      // Cabeçalho da tabela
-      ['#', 'Nome', 'Telefone', 'Loja', 'CNPJ', 'Data Abertura', 'Hora Abertura', 'Motivo', 'Empresa']
+      [`Total de registros: ${relatoriosFiltrados.value.length}`]
     ]
+    
+    // Adicionar filtros aplicados se houver
+    if (filtrosAplicados.value) {
+      dadosCompletos.push([]) // Linha vazia
+      dadosCompletos.push(['Filtros Aplicados:'])
+      
+      if (filtros.value.dataInicial && filtros.value.dataFinal) {
+        const dataIni = new Date(filtros.value.dataInicial).toLocaleDateString('pt-BR')
+        const dataFim = new Date(filtros.value.dataFinal).toLocaleDateString('pt-BR')
+        dadosCompletos.push([`Período: ${dataIni} até ${dataFim}`])
+      } else if (filtros.value.dataInicial) {
+        const dataIni = new Date(filtros.value.dataInicial).toLocaleDateString('pt-BR')
+        dadosCompletos.push([`Data inicial: ${dataIni}`])
+      } else if (filtros.value.dataFinal) {
+        const dataFim = new Date(filtros.value.dataFinal).toLocaleDateString('pt-BR')
+        dadosCompletos.push([`Data final: ${dataFim}`])
+      }
+      
+      if (filtros.value.empresa) {
+        dadosCompletos.push([`Empresa: ${filtros.value.empresa}`])
+      }
+      
+      if (filtros.value.lojaOuCnpj) {
+        dadosCompletos.push([`Loja/CNPJ: ${filtros.value.lojaOuCnpj}`])
+      }
+    }
+    
+    // Linha vazia e cabeçalho da tabela
+    dadosCompletos.push([])
+    dadosCompletos.push(['#', 'Nome', 'Telefone', 'Loja', 'CNPJ', 'Data Abertura', 'Hora Abertura', 'Motivo', 'Empresa'])
     
     // Adicionar dados dos relatórios
     relatoriosFiltrados.value.forEach((relatorio, index) => {
@@ -546,13 +615,32 @@ async function exportToExcel() {
     ]
     worksheet['!cols'] = columnWidths
     
-    // Mesclar células do cabeçalho
-    worksheet['!merges'] = [
+    // Mesclar células do cabeçalho (dinâmico baseado nos filtros)
+    const merges = [
       { s: { r: 0, c: 0 }, e: { r: 0, c: 8 } }, // Título principal
       { s: { r: 1, c: 0 }, e: { r: 1, c: 8 } }, // Subtítulo
       { s: { r: 2, c: 0 }, e: { r: 2, c: 8 } }, // Data
       { s: { r: 3, c: 0 }, e: { r: 3, c: 8 } }, // Total
     ]
+    
+    // Se há filtros, adicionar mesclagens para as linhas de filtros
+    if (filtrosAplicados.value) {
+      let linhaMerge = 5 // Linha "Filtros Aplicados:"
+      merges.push({ s: { r: linhaMerge, c: 0 }, e: { r: linhaMerge, c: 8 } })
+      
+      // Contar quantas linhas de filtro foram adicionadas
+      let linhasExtras = 1 // "Filtros Aplicados:"
+      if (filtros.value.dataInicial || filtros.value.dataFinal) linhasExtras++
+      if (filtros.value.empresa) linhasExtras++
+      if (filtros.value.lojaOuCnpj) linhasExtras++
+      
+      // Mesclar cada linha de filtro
+      for (let i = 1; i < linhasExtras; i++) {
+        merges.push({ s: { r: linhaMerge + i, c: 0 }, e: { r: linhaMerge + i, c: 8 } })
+      }
+    }
+    
+    worksheet['!merges'] = merges
     
     // Estilizar células específicas
     if (worksheet['A1']) {
