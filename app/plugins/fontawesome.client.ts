@@ -28,7 +28,8 @@ import {
   faPhone,
   faComments,
   faFilter,
-  faDatabase
+  faDatabase,
+  faTicket
 } from '@fortawesome/free-solid-svg-icons'
 
 // This is important, we are going to let Nuxt worry about the CSS
@@ -64,7 +65,8 @@ library.add(
   faPhone,
   faComments,
   faFilter,
-  faDatabase
+  faDatabase,
+  faTicket
 )
 
 export default defineNuxtPlugin((nuxtApp) => {

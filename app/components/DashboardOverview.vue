@@ -13,9 +13,7 @@
               <p class="text-xs text-blue-600 mt-1">até agora</p>
             </div>
             <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center shadow-lg">
-              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m1.6 8L6 5H5m2 8a2 2 0 104 0 2 2 0 00-4 0zm10 0a2 2 0 104 0 2 2 0 00-4 0z"/>
-              </svg>
+              <font-awesome-icon :icon="['fas', 'ticket']" class="text-white text-2xl drop-shadow-lg" />
             </div>
           </div>
         </div>
@@ -49,9 +47,7 @@
               <p class="text-xs text-green-600 mt-1">este mês</p>
             </div>
             <div class="w-12 h-12 bg-gradient-to-br from-amber-500 to-amber-600 rounded-lg flex items-center justify-center shadow-lg">
-              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
-              </svg>
+              <font-awesome-icon :icon="['fas', 'ticket']" class="text-white text-2xl" />
             </div>
           </div>
         </div>
