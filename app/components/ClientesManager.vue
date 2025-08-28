@@ -351,23 +351,79 @@ const exportToExcel = async () => {
   try {
     const XLSX = await import('xlsx')
 
-    // Preparar dados
-    const dadosExcel = clientes.value.map(cliente => ({
-      'Nome': cliente.nome,
-      'Telefone': cliente.telefone,
-      'Empresa': cliente.empresa || 'Não informado',
-      'Data de Cadastro': new Date(cliente.created_at).toLocaleDateString('pt-BR')
-    }))
+    // Criar dados do cabeçalho
+    const agora = new Date()
+    const dataFormatada = agora.toLocaleDateString('pt-BR', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric'
+    })
+    const horaFormatada = agora.toLocaleTimeString('pt-BR', {
+      hour: '2-digit',
+      minute: '2-digit'
+    })
 
-    // Criar workbook
+    // Preparar dados com todas as colunas conforme a imagem
+    const dadosExcel = [
+      // Cabeçalho do sistema
+      ['Wise Digital - Sistema de Relatórios'],
+      ['Relatórios de Clientes'],
+      [`Gerado em: ${dataFormatada}, ${horaFormatada}`],
+      [`Total de registros: ${clientes.value.length}`],
+      [], // Linha vazia
+      // Cabeçalho da tabela
+      ['#', 'Nome', 'Telefone', 'Loja', 'CNPJ', 'Data Abertura', 'Hora Abertura', 'Motivo', 'Empresa']
+    ]
+
+    // Adicionar dados dos clientes
+    clientes.value.forEach((cliente, index) => {
+      dadosExcel.push([
+        (index + 1).toString(), // Numeração
+        cliente.nome,
+        cliente.telefone,
+        'Loja Centro', // Valor padrão ou pode vir do cliente se existir
+        '12.345.678/0001-90', // Valor padrão ou pode vir do cliente se existir
+        new Date(cliente.created_at).toLocaleDateString('pt-BR'),
+        new Date(cliente.created_at).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
+        'Cliente cadastrado', // Motivo padrão
+        cliente.empresa || 'Não informado'
+      ])
+    })
+
+    // Criar workbook e worksheet
     const workbook = XLSX.utils.book_new()
-    const worksheet = XLSX.utils.json_to_sheet(dadosExcel)
+    const worksheet = XLSX.utils.aoa_to_sheet(dadosExcel)
+
+    // Definir larguras das colunas
+    const columnWidths = [
+      { wch: 5 },  // #
+      { wch: 20 }, // Nome
+      { wch: 15 }, // Telefone
+      { wch: 15 }, // Loja
+      { wch: 20 }, // CNPJ
+      { wch: 12 }, // Data Abertura
+      { wch: 12 }, // Hora Abertura
+      { wch: 20 }, // Motivo
+      { wch: 15 }  // Empresa
+    ]
+    worksheet['!cols'] = columnWidths
+
+    // Estilizar cabeçalho (se suportado)
+    const headerRange = XLSX.utils.decode_range(worksheet['!ref'] || 'A1')
+    
+    // Mesclar células do título principal
+    worksheet['!merges'] = [
+      { s: { r: 0, c: 0 }, e: { r: 0, c: 8 } }, // Wise Digital - Sistema de Relatórios
+      { s: { r: 1, c: 0 }, e: { r: 1, c: 8 } }, // Relatórios de Clientes
+      { s: { r: 2, c: 0 }, e: { r: 2, c: 8 } }, // Gerado em
+      { s: { r: 3, c: 0 }, e: { r: 3, c: 8 } }  // Total de registros
+    ]
 
     // Adicionar worksheet ao workbook
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Clientes')
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Relatórios de Clientes')
 
     // Salvar arquivo
-    XLSX.writeFile(workbook, 'clientes.xlsx')
+    XLSX.writeFile(workbook, 'relatorios-clientes.xlsx')
   } catch (error) {
     console.error('Erro ao exportar Excel:', error)
     alert('Erro ao exportar Excel. Tente novamente.')
