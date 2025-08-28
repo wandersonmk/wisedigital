@@ -62,7 +62,7 @@
 const isMobileMenuOpen = ref(false)
 
 // Composables para autenticação
-const { signOut } = useAuth()
+// const { signOut } = useAuth() // Temporariamente comentado
 
 // Título dinâmico baseado na rota
 const route = useRoute()

@@ -29,10 +29,41 @@
       </div>
     </div>
 
-    <!-- Lista de clientes -->
+      <!-- Lista de clientes -->
     <div class="p-6">
+      <!-- Loading state -->
+      <div v-if="isLoading" class="text-center py-8">
+        <div class="flex flex-col items-center">
+          <div class="w-12 h-12 mx-auto mb-4 bg-muted rounded-full flex items-center justify-center">
+            <svg class="w-6 h-6 text-muted-foreground animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+            </svg>
+          </div>
+          <h3 class="text-lg font-medium text-foreground mb-2">Carregando clientes...</h3>
+          <p class="text-muted-foreground">Aguarde um momento</p>
+        </div>
+      </div>
+
+      <!-- Error state -->
+      <div v-else-if="error" class="text-center py-8">
+        <div class="flex flex-col items-center">
+          <font-awesome-icon 
+            icon="exclamation-triangle" 
+            class="w-12 h-12 text-red-500 mb-4" 
+          />
+          <h3 class="text-lg font-medium text-foreground mb-2">Erro ao carregar clientes</h3>
+          <p class="text-muted-foreground mb-4">{{ error }}</p>
+          <button
+            @click="recarregarClientes"
+            class="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
+          >
+            Tentar novamente
+          </button>
+        </div>
+      </div>
+
       <!-- Mensagem quando não há clientes -->
-      <div v-if="clientes.length === 0" class="text-center py-8">
+      <div v-else-if="clientes.length === 0" class="text-center py-8">
         <div class="flex flex-col items-center">
           <font-awesome-icon 
             icon="users" 
@@ -155,350 +186,101 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+// Usar o composable de clientes
+const { 
+  clientes, 
+  isLoading, 
+  error, 
+  fetchClientes, 
+  clearError 
+} = useClientes()
 
-// Interface para tipagem do cliente
-interface Cliente {
-  id: string
-  nome: string
-  telefone: string
-  empresa: string
+// Carregar clientes quando o componente for montado
+onMounted(() => {
+  fetchClientes()
+})
+
+// Função para recarregar clientes
+const recarregarClientes = () => {
+  clearError()
+  fetchClientes()
 }
 
-// Estado reativo
-const clienteParaExcluir = ref<Cliente | null>(null)
-
-// Dados de exemplo (substituir pela busca real do banco futuramente)
-const clientes = ref<Cliente[]>([
-  {
-    id: '1',
-    nome: 'João Silva',
-    telefone: '(11) 99999-9999',
-    empresa: 'VIVO'
-  },
-  {
-    id: '2',
-    nome: 'Maria Santos',
-    telefone: '(11) 88888-8888',
-    empresa: 'TIM'
-  },
-  {
-    id: '3',
-    nome: 'Pedro Oliveira',
-    telefone: '(11) 77777-7777',
-    empresa: 'CLARO'
-  },
-  {
-    id: '4',
-    nome: 'Ana Costa',
-    telefone: '(11) 66666-6666',
-    empresa: 'OI'
-  }
-])
-
 // Função para exportar para PDF
-async function exportToPDF() {
-  // Verificar se estamos no cliente
-  if (typeof window === 'undefined') {
-    console.warn('Exportação PDF só funciona no cliente')
-    return
-  }
-
+const exportToPDF = async () => {
   try {
-    // Importação dinâmica para evitar problemas com SSR
-    const [{ default: jsPDF }, { default: autoTable }] = await Promise.all([
-      import('jspdf'),
-      import('jspdf-autotable')
-    ])
-    
-    // Criar documento PDF em formato A4
-    const doc = new jsPDF('portrait', 'mm', 'a4')
-    
-    // Configurar fonte para suporte UTF-8
-    doc.setFont('helvetica', 'normal')
-    
-    // Cores do tema (como tuplas para TypeScript)
-    const primaryColor: [number, number, number] = [79, 70, 229] // Indigo-600
-    const textColor: [number, number, number] = [17, 24, 39] // Gray-900
-    const lightGray: [number, number, number] = [243, 244, 246] // Gray-100
-    
-    // Header do documento
-    doc.setFillColor(primaryColor[0], primaryColor[1], primaryColor[2])
-    doc.rect(0, 0, 210, 40, 'F')
-    
-    // Logo/Título
-    doc.setTextColor(255, 255, 255)
-    doc.setFontSize(24)
-    doc.setFont('helvetica', 'bold')
-    doc.text('Wise Digital', 20, 20)
-    
-    doc.setFontSize(14)
-    doc.setFont('helvetica', 'normal')
-    doc.text('Sistema de Relatórios', 20, 30)
-    
-    // Informações do relatório
-    doc.setTextColor(textColor[0], textColor[1], textColor[2])
-    doc.setFontSize(18)
-    doc.setFont('helvetica', 'bold')
-    doc.text('Lista de Clientes', 20, 55)
-    
+    const { jsPDF } = await import('jspdf')
+    const doc = new jsPDF()
+
+    // Título
+    doc.setFontSize(20)
+    doc.text('Lista de Clientes', 20, 20)
+
     // Data de geração
-    const agora = new Date()
-    const dataFormatada = agora.toLocaleDateString('pt-BR', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    })
-    
     doc.setFontSize(10)
-    doc.setFont('helvetica', 'normal')
-    doc.setTextColor(107, 114, 128) // Gray-500
-    doc.text(`Gerado em: ${dataFormatada}`, 20, 65)
-    doc.text(`Total de clientes: ${clientes.value.length}`, 20, 72)
-    
-    // Preparar dados para a tabela
-    const tableData = clientes.value.map((cliente, index) => [
-      (index + 1).toString(),
-      cliente.nome,
-      cliente.telefone,
-      cliente.empresa
-    ])
-    
-    // Configurar tabela com autoTable
-    autoTable(doc, {
-      head: [['#', 'Nome', 'Telefone', 'Empresa']],
-      body: tableData,
-      startY: 85,
-      theme: 'grid',
-      styles: {
-        font: 'helvetica',
-        fontSize: 10,
-        cellPadding: 5,
-        textColor: textColor,
-        lineColor: [209, 213, 219], // Gray-300
-        lineWidth: 0.5
-      },
-      headStyles: {
-        fillColor: primaryColor,
-        textColor: [255, 255, 255],
-        fontStyle: 'bold',
-        fontSize: 11
-      },
-      alternateRowStyles: {
-        fillColor: lightGray
-      },
-      columnStyles: {
-        0: { cellWidth: 15, halign: 'center' }, // Número
-        1: { cellWidth: 60 }, // Nome
-        2: { cellWidth: 45 }, // Telefone
-        3: { cellWidth: 35 } // Empresa
-      },
-      margin: { left: 20, right: 20 }
+    doc.text(`Gerado em: ${new Date().toLocaleDateString('pt-BR')} às ${new Date().toLocaleTimeString('pt-BR')}`, 20, 30)
+
+    // Cabeçalho da tabela
+    let yPosition = 50
+    doc.setFontSize(12)
+    doc.text('Nome', 20, yPosition)
+    doc.text('Telefone', 80, yPosition)
+    doc.text('Empresa', 130, yPosition)
+    doc.text('Data', 170, yPosition)
+
+    // Linha separadora
+    yPosition += 5
+    doc.line(20, yPosition, 190, yPosition)
+    yPosition += 10
+
+    // Dados dos clientes
+    doc.setFontSize(10)
+    clientes.value.forEach((cliente) => {
+      if (yPosition > 270) {
+        doc.addPage()
+        yPosition = 20
+      }
+
+      doc.text(cliente.nome, 20, yPosition)
+      doc.text(cliente.telefone, 80, yPosition)
+      doc.text(cliente.empresa || 'Não informado', 130, yPosition)
+      doc.text(new Date(cliente.created_at).toLocaleDateString('pt-BR'), 170, yPosition)
+      yPosition += 15
     })
-    
-    // Footer
-    const pageCount = doc.getNumberOfPages()
-    for (let i = 1; i <= pageCount; i++) {
-      doc.setPage(i)
-      
-      // Linha do footer
-      doc.setDrawColor(209, 213, 219)
-      doc.line(20, 280, 190, 280)
-      
-      // Texto do footer
-      doc.setFontSize(8)
-      doc.setTextColor(107, 114, 128)
-      doc.text('Wise Digital - Sistema de Relatórios', 20, 288)
-      doc.text(`Página ${i} de ${pageCount}`, 190, 288, { align: 'right' })
-    }
-    
-    // Salvar o arquivo
-    const nomeArquivo = `clientes_${agora.toISOString().split('T')[0]}.pdf`
-    doc.save(nomeArquivo)
-    
-    console.log('PDF exportado com sucesso!')
-    
+
+    // Salvar o PDF
+    doc.save('clientes.pdf')
   } catch (error) {
     console.error('Erro ao exportar PDF:', error)
-    alert('Erro ao gerar o PDF. Tente novamente.')
+    alert('Erro ao exportar PDF. Tente novamente.')
   }
 }
 
 // Função para exportar para Excel
-async function exportToExcel() {
-  // Verificar se estamos no cliente
-  if (typeof window === 'undefined') {
-    console.warn('Exportação Excel só funciona no cliente')
-    return
-  }
-
+const exportToExcel = async () => {
   try {
-    // Importação dinâmica para evitar problemas com SSR
     const XLSX = await import('xlsx')
-    
-    // Data de geração
-    const agora = new Date()
-    const dataFormatada = agora.toLocaleDateString('pt-BR', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    })
-    
-    // Preparar dados completos para o Excel
-    const dadosCompletos = [
-      // Informações do cabeçalho
-      ['Wise Digital - Sistema de Relatórios'],
-      ['Lista de Clientes'],
-      [`Gerado em: ${dataFormatada}`],
-      [`Total de clientes: ${clientes.value.length}`],
-      [], // Linha vazia
-      // Cabeçalho da tabela
-      ['#', 'Nome', 'Telefone', 'Empresa']
-    ]
-    
-    // Adicionar dados dos clientes
-    clientes.value.forEach((cliente, index) => {
-      dadosCompletos.push([
-        (index + 1).toString(),
-        cliente.nome,
-        cliente.telefone,
-        cliente.empresa
-      ])
-    })
-    
-    // Criar workbook e worksheet
+
+    // Preparar dados
+    const dadosExcel = clientes.value.map(cliente => ({
+      'Nome': cliente.nome,
+      'Telefone': cliente.telefone,
+      'Empresa': cliente.empresa || 'Não informado',
+      'Data de Cadastro': new Date(cliente.created_at).toLocaleDateString('pt-BR')
+    }))
+
+    // Criar workbook
     const workbook = XLSX.utils.book_new()
-    const worksheet = XLSX.utils.aoa_to_sheet(dadosCompletos)
-    
-    // Configurar largura das colunas
-    const columnWidths = [
-      { wch: 5 },  // # (número)
-      { wch: 25 }, // Nome
-      { wch: 18 }, // Telefone
-      { wch: 15 }  // Empresa
-    ]
-    worksheet['!cols'] = columnWidths
-    
-    // Mesclar células do cabeçalho
-    worksheet['!merges'] = [
-      { s: { r: 0, c: 0 }, e: { r: 0, c: 3 } }, // Título principal
-      { s: { r: 1, c: 0 }, e: { r: 1, c: 3 } }, // Subtítulo
-      { s: { r: 2, c: 0 }, e: { r: 2, c: 3 } }, // Data
-      { s: { r: 3, c: 0 }, e: { r: 3, c: 3 } }, // Total
-    ]
-    
-    // Estilizar células específicas (título, cabeçalho da tabela)
-    const range = XLSX.utils.decode_range(worksheet['!ref'] || 'A1')
-    
-    // Estilo do título principal (linha 1)
-    if (worksheet['A1']) {
-      worksheet['A1'].s = {
-        font: { bold: true, size: 14, color: { rgb: "4F46E5" } },
-        alignment: { horizontal: "center" }
-      }
-    }
-    
-    // Estilo do subtítulo (linha 2)
-    if (worksheet['A2']) {
-      worksheet['A2'].s = {
-        font: { bold: true, size: 12 },
-        alignment: { horizontal: "center" }
-      }
-    }
-    
-    // Estilizar cabeçalho da tabela (linha 6 - índice 5)
-    for (let col = 0; col < 4; col++) {
-      const cellAddress = XLSX.utils.encode_cell({ r: 5, c: col })
-      if (worksheet[cellAddress]) {
-        worksheet[cellAddress].s = {
-          font: { bold: true, color: { rgb: "FFFFFF" } },
-          fill: { fgColor: { rgb: "4F46E5" } }, // Indigo-600
-          alignment: { horizontal: "center" },
-          border: {
-            top: { style: "thin", color: { rgb: "000000" } },
-            bottom: { style: "thin", color: { rgb: "000000" } },
-            left: { style: "thin", color: { rgb: "000000" } },
-            right: { style: "thin", color: { rgb: "000000" } }
-          }
-        }
-      }
-    }
-    
-    // Estilizar dados da tabela (a partir da linha 7)
-    for (let row = 6; row < dadosCompletos.length; row++) {
-      for (let col = 0; col < 4; col++) {
-        const cellAddress = XLSX.utils.encode_cell({ r: row, c: col })
-        if (worksheet[cellAddress]) {
-          worksheet[cellAddress].s = {
-            border: {
-              top: { style: "thin", color: { rgb: "CCCCCC" } },
-              bottom: { style: "thin", color: { rgb: "CCCCCC" } },
-              left: { style: "thin", color: { rgb: "CCCCCC" } },
-              right: { style: "thin", color: { rgb: "CCCCCC" } }
-            },
-            alignment: { horizontal: col === 0 ? "center" : "left" } // Centralizar apenas o número
-          }
-        }
-      }
-    }
-    
+    const worksheet = XLSX.utils.json_to_sheet(dadosExcel)
+
     // Adicionar worksheet ao workbook
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Clientes')
-    
-    // Salvar o arquivo
-    const nomeArquivo = `clientes_${agora.toISOString().split('T')[0]}.xlsx`
-    XLSX.writeFile(workbook, nomeArquivo)
-    
-    console.log('Excel exportado com sucesso!')
-    
+
+    // Salvar arquivo
+    XLSX.writeFile(workbook, 'clientes.xlsx')
   } catch (error) {
     console.error('Erro ao exportar Excel:', error)
-    alert('Erro ao gerar o arquivo Excel. Tente novamente.')
-  }
-}
-
-// Função para abrir WhatsApp
-function abrirWhatsApp(cliente: Cliente) {
-  // Remove caracteres especiais do telefone
-  const telefone = cliente.telefone.replace(/\D/g, '')
-  
-  // Mensagem simples: Olá + nome do cliente
-  const mensagem = `Olá ${cliente.nome}`
-  
-  // Cria URL do WhatsApp
-  const whatsappUrl = `https://wa.me/55${telefone}?text=${encodeURIComponent(mensagem)}`
-  
-  // Abre em nova aba
-  window.open(whatsappUrl, '_blank')
-}
-
-// Função para confirmar exclusão
-function confirmarExclusao(cliente: Cliente) {
-  clienteParaExcluir.value = cliente
-}
-
-// Função para cancelar exclusão
-function cancelarExclusao() {
-  clienteParaExcluir.value = null
-}
-
-// Função para excluir cliente
-function excluirCliente() {
-  if (clienteParaExcluir.value) {
-    console.log('Excluindo cliente:', clienteParaExcluir.value.nome)
-    // TODO: Implementar exclusão no banco de dados
-    
-    // Por enquanto, apenas remove da lista local
-    const index = clientes.value.findIndex(c => c.id === clienteParaExcluir.value!.id)
-    if (index > -1) {
-      clientes.value.splice(index, 1)
-    }
-    
-    clienteParaExcluir.value = null
+    alert('Erro ao exportar Excel. Tente novamente.')
   }
 }
 </script>

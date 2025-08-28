@@ -15,7 +15,7 @@
       <div class="flex items-center p-4 border-b border-border">
         <div class="flex-1 min-w-0">
           <h1 class="text-lg font-bold truncate">
-            {{ nomeEmpresa || 'Carregando...' }}
+            Wise Digital
           </h1>
           <p class="text-xs text-muted-foreground">Sistema de Relatório</p>
         </div>
@@ -147,7 +147,7 @@
       <div class="flex items-center justify-between p-4 border-b border-border">
         <div class="flex-1 min-w-0">
           <h1 class="text-lg font-bold truncate">
-            {{ nomeEmpresa || 'Carregando...' }}
+            Wise Digital
           </h1>
           <p class="text-xs text-muted-foreground">Sistema de Relatório</p>
         </div>
@@ -304,14 +304,9 @@ const emit = defineEmits<{
   'close-mobile': []
 }>()
 
-// Composables para empresa - SIMPLES
-const { nomeEmpresa, buscarNomeEmpresa } = process.client ? useEmpresa() : { 
-  nomeEmpresa: ref('Carregando...'), 
-  buscarNomeEmpresa: async () => {} 
-}
-
 // Composables - abordagem simplificada
 const userEmail = ref<string | null>(null)
+const userName = ref<string | null>(null)
 const isLoggedIn = ref(false)
 
 // Toast e montagem SIMPLES
@@ -320,20 +315,15 @@ if (process.client) {
   onMounted(async () => {
     toast.value = await useToastSafe()
     checkUserSession()
-    
-    // BUSCA SIMPLES DA EMPRESA - sem complicação
-    setTimeout(async () => {
-      await buscarNomeEmpresa()
-    }, 1000)
   })
 }
 
-// Atualizar nome da empresa quando página ficar visível - SIMPLES
+// Atualizar dados quando página ficar visível - SIMPLES
 if (process.client) {
   // Escutar mudanças de visibilidade da página para atualizar dados
   const handleVisibilityChange = async () => {
     if (!document.hidden) {
-      await buscarNomeEmpresa()
+      checkUserSession()
     }
   }
   
