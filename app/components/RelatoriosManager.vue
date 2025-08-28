@@ -145,7 +145,7 @@
 
       <!-- Tabela de relatórios -->
       <div class="overflow-x-auto">
-        <div style="max-height: 400px; overflow-y: auto;">
+        <div style="max-height: 400px; overflow-y: auto; position: relative;">
           <table class="w-full">
             <thead>
               <tr class="border-b border-border">
@@ -212,8 +212,8 @@
               </tr>
               
               <tr v-if="relatoriosFiltrados && relatoriosVisiveis < relatoriosFiltrados.length">
-                <td :colspan="7">
-                  <div ref="relatorioSentinel" style="height: 1px;"></div>
+                <td :colspan="7" style="padding:0; border:none; background:transparent;">
+                  <div ref="relatorioSentinel" style="height: 1px; width: 100%;"></div>
                 </td>
               </tr>
             </tbody>
@@ -725,26 +725,31 @@ const relatoriosVisiveis = ref(10)
 const relatorioSentinel = ref<HTMLElement | null>(null)
 let relatorioObserver: IntersectionObserver | null = null
 
+function setupInfiniteScroll() {
+  if (relatorioObserver) {
+    relatorioObserver.disconnect()
+    relatorioObserver = null
+  }
+  if (relatorioSentinel.value && relatoriosFiltrados.value.length > 10) {
+    relatorioObserver = new IntersectionObserver((entries) => {
+      if (entries[0]?.isIntersecting) {
+        if (relatoriosVisiveis.value < relatoriosFiltrados.value.length) {
+          relatoriosVisiveis.value += 10
+        }
+      }
+    })
+    relatorioObserver.observe(relatorioSentinel.value)
+  }
+}
+
 onMounted(() => {
   fetchRelatorios()
+  nextTick(() => setupInfiniteScroll())
 })
 
 watch(
-  () => relatoriosFiltrados?.length,
-  () => {
-    if (relatorioSentinel.value && relatoriosFiltrados && relatoriosFiltrados.length > 10) {
-      if (!relatorioObserver) {
-        relatorioObserver = new IntersectionObserver((entries) => {
-          if (entries[0]?.isIntersecting) {
-            if (relatoriosVisiveis.value < relatoriosFiltrados.length) {
-              relatoriosVisiveis.value += 10
-            }
-          }
-        })
-        relatorioObserver.observe(relatorioSentinel.value)
-      }
-    }
-  }
+  () => relatoriosFiltrados.value.length,
+  () => nextTick(() => setupInfiniteScroll())
 )
 </script>
 
