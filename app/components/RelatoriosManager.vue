@@ -83,21 +83,13 @@
       </div>
 
       <!-- Botões de ação dos filtros -->
-      <div class="flex items-center space-x-3 mt-4">
-        <button
-          @click="aplicarFiltros"
-          class="flex items-center space-x-2 px-4 py-2 bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg transition-colors text-sm font-medium"
-        >
-          <font-awesome-icon icon="filter" class="w-4 h-4" />
-          <span>Aplicar Filtros</span>
-        </button>
-        
+      <div class="flex items-center justify-end mt-4">
         <button
           @click="limparFiltros"
           class="flex items-center space-x-2 px-4 py-2 border border-border text-foreground hover:bg-muted rounded-lg transition-colors text-sm font-medium"
         >
           <font-awesome-icon icon="times-circle" class="w-4 h-4" />
-          <span>Limpar</span>
+          <span>Limpar Filtros</span>
         </button>
       </div>
     </div>
@@ -193,7 +185,7 @@
       <!-- Informações de resumo -->
       <div v-if="relatoriosFiltrados.length > 0" class="mt-6 p-4 bg-muted/50 rounded-lg">
         <div class="flex items-center justify-between text-sm text-muted-foreground">
-          <span>Total de relatórios: {{ relatoriosFiltrados.length }}</span>
+          <span>Total de registros: {{ relatoriosFiltrados.length }}</span>
           <span v-if="filtrosAplicados">Filtros aplicados</span>
         </div>
       </div>
@@ -233,7 +225,13 @@ const filtros = ref<Filtros>({
   empresa: ''
 })
 
-const filtrosAplicados = ref(false)
+// Computed para detectar se há filtros ativos automaticamente
+const filtrosAplicados = computed(() => {
+  return filtros.value.dataInicial !== '' || 
+         filtros.value.dataFinal !== '' || 
+         filtros.value.lojaOuCnpj !== '' || 
+         filtros.value.empresa !== ''
+})
 
 // Dados de exemplo (substituir pela busca real do banco futuramente)
 const relatorios = ref<Relatorio[]>([
@@ -329,12 +327,6 @@ const relatoriosFiltrados = computed(() => {
   return resultado
 })
 
-// Função para aplicar filtros
-function aplicarFiltros() {
-  filtrosAplicados.value = true
-  console.log('Filtros aplicados:', filtros.value)
-}
-
 // Função para limpar filtros
 function limparFiltros() {
   filtros.value = {
@@ -343,8 +335,7 @@ function limparFiltros() {
     lojaOuCnpj: '',
     empresa: ''
   }
-  filtrosAplicados.value = false
-  console.log('Filtros limpos')
+  console.log('Filtros limpos - os filtros agora são automáticos!')
 }
 
 // Função para obter classes CSS da empresa
@@ -418,7 +409,7 @@ async function exportToPDF() {
     doc.setFont('helvetica', 'normal')
     doc.setTextColor(107, 114, 128)
     doc.text(`Gerado em: ${dataFormatada}`, 20, 65)
-    doc.text(`Total de relatórios: ${relatoriosFiltrados.value.length}`, 20, 72)
+    doc.text(`Total de registros: ${relatoriosFiltrados.value.length}`, 20, 72)
     
     // Preparar dados para a tabela
     const tableData = relatoriosFiltrados.value.map((relatorio, index) => [
@@ -524,7 +515,7 @@ async function exportToExcel() {
       ['Wise Digital - Sistema de Relatórios'],
       ['Relatórios de Tickets'],
       [`Gerado em: ${dataFormatada}`],
-      [`Total de relatórios: ${relatoriosFiltrados.value.length}`],
+      [`Total de registros: ${relatoriosFiltrados.value.length}`],
       [], // Linha vazia
       // Cabeçalho da tabela
       ['#', 'Nome', 'Telefone', 'Loja', 'CNPJ', 'Data Abertura', 'Hora Abertura', 'Motivo', 'Empresa']
