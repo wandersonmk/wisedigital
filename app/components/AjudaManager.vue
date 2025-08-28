@@ -115,6 +115,56 @@
         </div>
       </div>
 
+        <!-- Seção: Novas Funcionalidades -->
+        <div class="space-y-4">
+          <div class="flex items-center space-x-3 mb-4">
+            <div class="w-8 h-8 bg-blue-100 dark:bg-blue-900/20 rounded-lg flex items-center justify-center">
+              <font-awesome-icon 
+                icon="bolt" 
+                class="w-4 h-4 text-blue-600 dark:text-blue-400" 
+              />
+            </div>
+            <h3 class="text-xl font-semibold text-foreground">Novas Funcionalidades</h3>
+          </div>
+          <div class="bg-muted/30 rounded-lg p-4 space-y-3">
+            <h4 class="font-medium text-foreground flex items-center space-x-2">
+              <span class="w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm">1</span>
+              <span>Atualizar Dados</span>
+            </h4>
+            <p class="text-sm text-muted-foreground ml-8">
+              Para buscar os dados mais recentes do banco, basta apertar <strong>F5</strong> para atualizar a página. Isso garante que você está visualizando as informações mais atuais após alterações ou inserções de dados.
+            </p>
+            <h4 class="font-medium text-foreground flex items-center space-x-2">
+              <span class="w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm">2</span>
+              <span>Scroll Infinito</span>
+            </h4>
+            <p class="text-sm text-muted-foreground ml-8">
+              As tabelas de relatórios e clientes agora carregam mais registros automaticamente conforme você rola a página. Não é necessário clicar em "Carregar mais" — basta rolar até o final da lista para ver mais resultados.
+            </p>
+            <h4 class="font-medium text-foreground flex items-center space-x-2">
+              <span class="w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm">3</span>
+              <span>Exibição de Totais</span>
+            </h4>
+            <p class="text-sm text-muted-foreground ml-8">
+              O sistema exibe o <strong>total de clientes</strong> e o <strong>total de registros</strong> diretamente acima das tabelas, facilitando o acompanhamento dos dados.
+            </p>
+            <h4 class="font-medium text-foreground flex items-center space-x-2">
+              <span class="w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm">4</span>
+              <span>Exportação de Dados</span>
+            </h4>
+            <p class="text-sm text-muted-foreground ml-8">
+              Os botões de exportação para <strong>PDF</strong> e <strong>Excel</strong> estão sempre visíveis acima das tabelas. Exporte os dados filtrados com apenas um clique.
+            </p>
+            <h4 class="font-medium text-foreground flex items-center space-x-2">
+              <span class="w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm">5</span>
+              <span>Atualização dos Relatórios</span>
+            </h4>
+            <p class="text-sm text-muted-foreground ml-8">
+              Sempre que inserir, editar ou remover dados, utilize o botão <strong>Recarregar</strong> para garantir que os relatórios exibam as informações atualizadas. Isso é essencial para manter a precisão dos dados apresentados.
+            </p>
+          </div>
+        </div>
+
       <!-- Seção: Configurações do Sistema -->
       <div class="space-y-4">
         <div class="flex items-center space-x-3 mb-4">
