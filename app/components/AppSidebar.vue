@@ -13,18 +13,11 @@
     >
       <!-- Header com nome da empresa -->
       <div class="flex items-center p-4 border-b border-border">
-        <div class="flex items-center space-x-3">
-          <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center">
-            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 6a3 3 0 11-6 0 3 3 0 616 0zM18 8a2 2 0 11-4 0 2 2 0 414 0zM14 15a4 4 0 00-8 0v3h8v-3z"/>
-            </svg>
-          </div>
-          <div class="flex-1 min-w-0">
-            <h1 class="text-lg font-bold truncate">
-              {{ nomeEmpresa || 'Carregando...' }}
-            </h1>
-            <p class="text-xs text-muted-foreground">Sistema de Relatório</p>
-          </div>
+        <div class="flex-1 min-w-0">
+          <h1 class="text-lg font-bold truncate">
+            {{ nomeEmpresa || 'Carregando...' }}
+          </h1>
+          <p class="text-xs text-muted-foreground">Sistema de Relatório</p>
         </div>
       </div>
 
@@ -146,18 +139,11 @@
     >
       <!-- Header com nome da empresa e botão fechar -->
       <div class="flex items-center justify-between p-4 border-b border-border">
-        <div class="flex items-center space-x-3 flex-1 min-w-0">
-          <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center">
-            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 6a3 3 0 11-6 0 3 3 0 616 0zM18 8a2 2 0 11-4 0 2 2 0 414 0zM14 15a4 4 0 00-8 0v3h8v-3z"/>
-            </svg>
-          </div>
-          <div class="flex-1 min-w-0">
-            <h1 class="text-lg font-bold truncate">
-              {{ nomeEmpresa || 'Carregando...' }}
-            </h1>
-            <p class="text-xs text-muted-foreground">Sistema de Relatório</p>
-          </div>
+        <div class="flex-1 min-w-0">
+          <h1 class="text-lg font-bold truncate">
+            {{ nomeEmpresa || 'Carregando...' }}
+          </h1>
+          <p class="text-xs text-muted-foreground">Sistema de Relatório</p>
         </div>
         
         <!-- Botão fechar -->
