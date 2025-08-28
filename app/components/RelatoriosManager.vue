@@ -10,15 +10,6 @@
         </p>
       </div>
       <div class="flex items-center space-x-2">
-        <font-awesome-icon 
-          icon="filter" 
-          class="w-5 h-5 text-muted-foreground" 
-        />
-        <span class="text-sm font-medium text-foreground">Filtros e Exportação</span>
-      </div>
-      
-      <!-- Botões de exportação -->
-      <div class="flex items-center space-x-2">
         <button
           @click="exportToPDF"
           class="flex items-center space-x-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors text-sm font-medium"
@@ -27,7 +18,6 @@
           <font-awesome-icon icon="file-pdf" class="w-4 h-4" />
           <span>PDF</span>
         </button>
-        
         <button
           @click="exportToExcel"
           class="flex items-center space-x-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors text-sm font-medium"
