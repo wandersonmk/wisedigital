@@ -92,19 +92,42 @@
 </template>
 
 <script setup lang="ts">
+
 import { Chart, registerables } from 'chart.js'
-
 Chart.register(...registerables)
-
-// Refs para os canvas dos gráficos
 const lineChartRef = ref<HTMLCanvasElement | null>(null)
 
-// Dados de exemplo para as métricas
 const metrics = ref({
-  clientesHoje: 24,
+  clientesHoje: 0,
   clientesNovos: 8,
   clientesVencendo: 12,
   faturamento: 3250
+})
+
+// Buscar quantidade de tickets de hoje na tabela relatorios
+async function fetchTicketsHoje() {
+  if (!process.client) return
+  const supabase = useSupabaseClient()
+  // Data de hoje no formato DD/MM/YYYY
+  const hoje = new Date()
+  const dia = String(hoje.getDate()).padStart(2, '0')
+  const mes = String(hoje.getMonth() + 1).padStart(2, '0')
+  const ano = hoje.getFullYear()
+  const dataHoje = `${dia}/${mes}/${ano}`
+  const { count, error } = await supabase
+    .from('relatorios')
+    .select('id', { count: 'exact', head: true })
+    .eq('data_abertura_chamado', dataHoje)
+  if (!error && typeof count === 'number') {
+    metrics.value.clientesHoje = count
+  }
+}
+
+onMounted(() => {
+  nextTick(() => {
+    createLineChart()
+    fetchTicketsHoje()
+  })
 })
 
 
