@@ -79,7 +79,7 @@
 
       <!-- Tabela de clientes -->
       <div v-else class="overflow-x-auto">
-        <div style="max-height: 400px; overflow-y: auto;">
+  <div style="max-height: 600px; overflow-y: auto;">
           <table class="w-full">
             <thead>
               <tr class="border-b border-border">
