@@ -72,7 +72,27 @@ const emailError = computed(() => {
 })
 
 const handleSubmit = async () => {
-  // Funcionalidade será implementada posteriormente
-  console.log('Email para recuperação:', email.value)
+  if (!isEmailValid.value) return
+  isLoading.value = true
+  try {
+    const res = await fetch('https://kxvraxkisrgyhntifxrc.supabase.co/auth/v1/recover', {
+      method: 'POST',
+      headers: {
+        'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt4dnJheGtpc3JneWhudGlmeHJjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYzODc5MDUsImV4cCI6MjA3MTk2MzkwNX0.tOV1n6ogyk9wuU_M4eBPhe5LUttuIWpXZQPkk2Ctc5U',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ email: email.value })
+    })
+    if (res.ok) {
+      alert('Instruções de redefinição de senha enviadas para seu email.')
+    } else {
+      const data = await res.json()
+      alert(data?.msg || 'Erro ao enviar instruções. Tente novamente.')
+    }
+  } catch (err) {
+    alert('Erro ao conectar ao serviço. Tente novamente.')
+  } finally {
+    isLoading.value = false
+  }
 }
 </script>
