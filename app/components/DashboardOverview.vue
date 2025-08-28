@@ -82,7 +82,7 @@
 
       <!-- Gráfico de Vendas Mensais -->
       <div class="bg-card text-card-foreground rounded-lg border border-border shadow-sm p-6">
-        <h3 class="text-lg font-semibold text-foreground mb-4">Vendas dos Últimos Meses</h3>
+  <h3 class="text-lg font-semibold text-foreground mb-4">Tickets dos Últimos Meses</h3>
         <div class="relative h-64">
           <canvas ref="lineChartRef"></canvas>
         </div>
@@ -195,8 +195,36 @@ onMounted(() => {
 
 
 // Configuração do gráfico de linha
-const createLineChart = () => {
+// Gráfico de tickets por mês
+async function createLineChart() {
   if (!lineChartRef.value) return
+
+  const supabase = useSupabaseClient()
+  const now = new Date()
+  const months = []
+  const labels = []
+  const data = []
+  // Últimos 6 meses
+  for (let i = 5; i >= 0; i--) {
+    const d = new Date(now.getFullYear(), now.getMonth() - i, 1)
+    const label = d.toLocaleString('pt-BR', { month: 'short' })
+    labels.push(label.charAt(0).toUpperCase() + label.slice(1))
+    const firstDay = new Date(d.getFullYear(), d.getMonth(), 1)
+    const lastDay = new Date(d.getFullYear(), d.getMonth() + 1, 0)
+    firstDay.setHours(0, 0, 0, 0)
+    lastDay.setHours(23, 59, 59, 999)
+    months.push({ firstDay, lastDay })
+  }
+
+  // Buscar total de tickets por mês
+  for (const m of months) {
+    const { count, error } = await supabase
+      .from('relatorios')
+      .select('id', { count: 'exact', head: true })
+      .gte('created_at', m.firstDay.toISOString())
+      .lte('created_at', m.lastDay.toISOString())
+    data.push(!error && typeof count === 'number' ? count : 0)
+  }
 
   const ctx = lineChartRef.value.getContext('2d')
   if (!ctx) return
@@ -204,12 +232,12 @@ const createLineChart = () => {
   new Chart(ctx, {
     type: 'line',
     data: {
-      labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
+      labels,
       datasets: [{
-        label: 'Vendas (R$)',
-        data: [2100, 2400, 1800, 2800, 3200, 3250],
-        borderColor: '#10B981', // Verde vibrante para crescimento
-        backgroundColor: 'rgba(16, 185, 129, 0.1)', // Verde com transparência
+        label: 'Tickets',
+        data,
+        borderColor: '#10B981',
+        backgroundColor: 'rgba(16, 185, 129, 0.1)',
         borderWidth: 3,
         fill: true,
         tension: 0.4,
@@ -231,7 +259,7 @@ const createLineChart = () => {
             color: '#F3F4F6',
             font: {
               size: 12,
-              weight: '500'
+              weight: 'bold'
             }
           }
         },
@@ -243,7 +271,7 @@ const createLineChart = () => {
           borderWidth: 1,
           callbacks: {
             label: function(context) {
-              return 'Vendas: R$ ' + context.parsed.y.toLocaleString('pt-BR')
+              return 'Tickets: ' + context.parsed.y.toLocaleString('pt-BR')
             }
           }
         }
@@ -257,8 +285,7 @@ const createLineChart = () => {
             }
           },
           grid: {
-            color: '#374151',
-            borderColor: '#4B5563'
+            color: '#374151'
           }
         },
         y: {
@@ -268,12 +295,11 @@ const createLineChart = () => {
               size: 11
             },
             callback: function(value) {
-              return 'R$ ' + (value / 1000).toFixed(0) + 'k'
+              return value + ' tickets'
             }
           },
           grid: {
-            color: '#374151',
-            borderColor: '#4B5563'
+            color: '#374151'
           }
         }
       }
@@ -282,10 +308,7 @@ const createLineChart = () => {
 }
 
 // Inicializar gráficos quando o componente for montado
-onMounted(() => {
-  nextTick(() => {
-    createLineChart()
-  })
-})
-</script>
+// ...existing code...
+// ...existing code...
 
+</script>
