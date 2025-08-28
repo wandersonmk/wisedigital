@@ -197,9 +197,133 @@ const clientes = ref<Cliente[]>([
 ])
 
 // Função para exportar para PDF
-function exportToPDF() {
-  console.log('Exportando para PDF...')
-  // TODO: Implementar exportação para PDF
+async function exportToPDF() {
+  // Verificar se estamos no cliente
+  if (typeof window === 'undefined') {
+    console.warn('Exportação PDF só funciona no cliente')
+    return
+  }
+
+  try {
+    // Importação dinâmica para evitar problemas com SSR
+    const [{ default: jsPDF }, { default: autoTable }] = await Promise.all([
+      import('jspdf'),
+      import('jspdf-autotable')
+    ])
+    
+    // Criar documento PDF em formato A4
+    const doc = new jsPDF('portrait', 'mm', 'a4')
+    
+    // Configurar fonte para suporte UTF-8
+    doc.setFont('helvetica', 'normal')
+    
+    // Cores do tema (como tuplas para TypeScript)
+    const primaryColor: [number, number, number] = [79, 70, 229] // Indigo-600
+    const textColor: [number, number, number] = [17, 24, 39] // Gray-900
+    const lightGray: [number, number, number] = [243, 244, 246] // Gray-100
+    
+    // Header do documento
+    doc.setFillColor(primaryColor[0], primaryColor[1], primaryColor[2])
+    doc.rect(0, 0, 210, 40, 'F')
+    
+    // Logo/Título
+    doc.setTextColor(255, 255, 255)
+    doc.setFontSize(24)
+    doc.setFont('helvetica', 'bold')
+    doc.text('Wise Digital', 20, 20)
+    
+    doc.setFontSize(14)
+    doc.setFont('helvetica', 'normal')
+    doc.text('Sistema de Relatórios', 20, 30)
+    
+    // Informações do relatório
+    doc.setTextColor(textColor[0], textColor[1], textColor[2])
+    doc.setFontSize(18)
+    doc.setFont('helvetica', 'bold')
+    doc.text('Lista de Clientes', 20, 55)
+    
+    // Data de geração
+    const agora = new Date()
+    const dataFormatada = agora.toLocaleDateString('pt-BR', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    })
+    
+    doc.setFontSize(10)
+    doc.setFont('helvetica', 'normal')
+    doc.setTextColor(107, 114, 128) // Gray-500
+    doc.text(`Gerado em: ${dataFormatada}`, 20, 65)
+    doc.text(`Total de clientes: ${clientes.value.length}`, 20, 72)
+    
+    // Preparar dados para a tabela
+    const tableData = clientes.value.map((cliente, index) => [
+      (index + 1).toString(),
+      cliente.nome,
+      cliente.telefone,
+      cliente.empresa
+    ])
+    
+    // Configurar tabela com autoTable
+    autoTable(doc, {
+      head: [['#', 'Nome', 'Telefone', 'Empresa']],
+      body: tableData,
+      startY: 85,
+      theme: 'grid',
+      styles: {
+        font: 'helvetica',
+        fontSize: 10,
+        cellPadding: 5,
+        textColor: textColor,
+        lineColor: [209, 213, 219], // Gray-300
+        lineWidth: 0.5
+      },
+      headStyles: {
+        fillColor: primaryColor,
+        textColor: [255, 255, 255],
+        fontStyle: 'bold',
+        fontSize: 11
+      },
+      alternateRowStyles: {
+        fillColor: lightGray
+      },
+      columnStyles: {
+        0: { cellWidth: 15, halign: 'center' }, // Número
+        1: { cellWidth: 60 }, // Nome
+        2: { cellWidth: 45 }, // Telefone
+        3: { cellWidth: 35 } // Empresa
+      },
+      margin: { left: 20, right: 20 }
+    })
+    
+    // Footer
+    const pageCount = doc.getNumberOfPages()
+    for (let i = 1; i <= pageCount; i++) {
+      doc.setPage(i)
+      
+      // Linha do footer
+      doc.setDrawColor(209, 213, 219)
+      doc.line(20, 280, 190, 280)
+      
+      // Texto do footer
+      doc.setFontSize(8)
+      doc.setTextColor(107, 114, 128)
+      doc.text('Wise Digital - Sistema de Relatórios', 20, 288)
+      doc.text(`Página ${i} de ${pageCount}`, 190, 288, { align: 'right' })
+    }
+    
+    // Salvar o arquivo
+    const nomeArquivo = `clientes_${agora.toISOString().split('T')[0]}.pdf`
+    doc.save(nomeArquivo)
+    
+    console.log('PDF exportado com sucesso!')
+    
+  } catch (error) {
+    console.error('Erro ao exportar PDF:', error)
+    alert('Erro ao gerar o PDF. Tente novamente.')
+  }
 }
 
 // Função para exportar para Excel
