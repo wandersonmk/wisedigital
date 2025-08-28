@@ -341,6 +341,28 @@ function getEmpresaClass(empresa: string) {
   return classes[empresa as keyof typeof classes] || 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400'
 }
 
+// Função auxiliar para converter data sem problemas de fuso horário
+function formatarDataFiltro(dataString: string): string {
+  // Separar a data em partes (YYYY-MM-DD)
+  const partes = dataString.split('-')
+  if (partes.length !== 3 || !partes[0] || !partes[1] || !partes[2]) {
+    return dataString // Retorna original se formato inválido
+  }
+  
+  const ano = parseInt(partes[0], 10)
+  const mes = parseInt(partes[1], 10) - 1 // Mês é 0-indexado no JS
+  const dia = parseInt(partes[2], 10)
+  
+  // Criar data especificando ano, mês e dia para evitar problemas de UTC
+  const data = new Date(ano, mes, dia)
+  
+  return data.toLocaleDateString('pt-BR', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric'
+  })
+}
+
 // Função para exportar para PDF
 async function exportToPDF() {
   // Verificar se estamos no cliente
@@ -417,16 +439,16 @@ async function exportToPDF() {
       yPosicaoAtual += 7
       
       if (filtros.value.dataInicial && filtros.value.dataFinal) {
-        const dataIni = new Date(filtros.value.dataInicial).toLocaleDateString('pt-BR')
-        const dataFim = new Date(filtros.value.dataFinal).toLocaleDateString('pt-BR')
+        const dataIni = formatarDataFiltro(filtros.value.dataInicial)
+        const dataFim = formatarDataFiltro(filtros.value.dataFinal)
         doc.text(`• Período: ${dataIni} até ${dataFim}`, 20, yPosicaoAtual)
         yPosicaoAtual += 7
       } else if (filtros.value.dataInicial) {
-        const dataIni = new Date(filtros.value.dataInicial).toLocaleDateString('pt-BR')
+        const dataIni = formatarDataFiltro(filtros.value.dataInicial)
         doc.text(`• Data inicial: ${dataIni}`, 20, yPosicaoAtual)
         yPosicaoAtual += 7
       } else if (filtros.value.dataFinal) {
-        const dataFim = new Date(filtros.value.dataFinal).toLocaleDateString('pt-BR')
+        const dataFim = formatarDataFiltro(filtros.value.dataFinal)
         doc.text(`• Data final: ${dataFim}`, 20, yPosicaoAtual)
         yPosicaoAtual += 7
       }
@@ -558,14 +580,14 @@ async function exportToExcel() {
       dadosCompletos.push(['Filtros Aplicados:'])
       
       if (filtros.value.dataInicial && filtros.value.dataFinal) {
-        const dataIni = new Date(filtros.value.dataInicial).toLocaleDateString('pt-BR')
-        const dataFim = new Date(filtros.value.dataFinal).toLocaleDateString('pt-BR')
+        const dataIni = formatarDataFiltro(filtros.value.dataInicial)
+        const dataFim = formatarDataFiltro(filtros.value.dataFinal)
         dadosCompletos.push([`Período: ${dataIni} até ${dataFim}`])
       } else if (filtros.value.dataInicial) {
-        const dataIni = new Date(filtros.value.dataInicial).toLocaleDateString('pt-BR')
+        const dataIni = formatarDataFiltro(filtros.value.dataInicial)
         dadosCompletos.push([`Data inicial: ${dataIni}`])
       } else if (filtros.value.dataFinal) {
-        const dataFim = new Date(filtros.value.dataFinal).toLocaleDateString('pt-BR')
+        const dataFim = formatarDataFiltro(filtros.value.dataFinal)
         dadosCompletos.push([`Data final: ${dataFim}`])
       }
       
