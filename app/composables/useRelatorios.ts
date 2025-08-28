@@ -20,39 +20,26 @@ export const useRelatorios = () => {
   const isLoading = ref(false)
   const error = ref<string | null>(null)
   
-  // Função para buscar relatórios
+  // Função para buscar todos os relatórios (sem filtro por usuário)
   const fetchRelatorios = async () => {
     console.log('🔍 Iniciando busca de relatórios...')
-    
+    isLoading.value = true
+    error.value = null
     try {
-      isLoading.value = true
-      error.value = null
-      
-      // Verificar se o usuário está autenticado
-      const { data: { user: currentUser } } = await supabase.auth.getUser()
-      console.log('👤 Usuário atual:', currentUser?.id)
-      
-      if (!currentUser) {
-        throw new Error('Usuário não autenticado')
-      }
-      
-      // Buscar relatórios do usuário logado
       const { data, error: fetchError } = await supabase
         .from('relatorios')
         .select('*')
-        .eq('usuario_id', currentUser.id)
         .order('created_at', { ascending: false })
-      
+
       if (fetchError) {
         console.error('❌ Erro ao buscar relatórios:', fetchError)
         throw fetchError
       }
-      
+
       console.log('✅ Relatórios encontrados:', data?.length || 0)
       console.log('📊 Dados dos relatórios:', data)
-      
+
       relatorios.value = data || []
-      
     } catch (err: any) {
       console.error('❌ Erro na busca de relatórios:', err)
       error.value = err.message || 'Erro ao carregar relatórios'
