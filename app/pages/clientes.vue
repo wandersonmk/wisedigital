@@ -13,8 +13,7 @@ const isClient = typeof window !== 'undefined'
 
 let clientes = ref([])
 if (isClient) {
-  const { clientes: clientesRef, fetchClientes } = useClientes()
-  clientes = clientesRef // usa o ref do composable diretamente
+  const { clientes, fetchClientes } = useClientes()
   onMounted(async () => {
     isLoading.value = true
     try {

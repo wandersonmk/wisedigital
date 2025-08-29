@@ -13,8 +13,7 @@ const isClient = typeof window !== 'undefined'
 
 let relatorios = ref([])
 if (isClient) {
-  const { relatorios: relatoriosRef, fetchRelatorios } = useRelatorios()
-  relatorios = relatoriosRef // usa o ref do composable diretamente
+  const { relatorios, fetchRelatorios } = useRelatorios()
   onMounted(async () => {
     isLoading.value = true
     try {
