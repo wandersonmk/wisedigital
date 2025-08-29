@@ -68,14 +68,17 @@ async function handleSubmit() {
       isLoading.value = false
       return
     }
-    // Chamada para redefinir senha via Supabase
-    const res = await fetch('https://kxvraxkisrgyhntifxrc.supabase.co/auth/v1/reset-password', {
-      method: 'POST',
+    // Chamada para redefinir senha via Supabase (PUT /auth/v1/user)
+    const res = await fetch('https://kxvraxkisrgyhntifxrc.supabase.co/auth/v1/user', {
+      method: 'PUT',
       headers: {
         'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt4dnJheGtpc3JneWhudGlmeHJjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYzODc5MDUsImV4cCI6MjA3MTk2MzkwNX0.tOV1n6ogyk9wuU_M4eBPhe5LUttuIWpXZQPkk2Ctc5U',
+        'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ access_token: accessToken, password: password.value })
+      body: JSON.stringify({
+        password: password.value
+      })
     })
     if (res.ok) {
       // @ts-ignore
