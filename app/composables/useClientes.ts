@@ -127,9 +127,9 @@ export const useClientes = () => {
 
   // Retornar estados e funções reativas (readonly)
   return {
-    clientes: readonly(clientes),
-    isLoading: readonly(isLoading),
-    error: readonly(error),
+    clientes,
+    isLoading,
+    error,
     fetchClientes,
     addCliente,
     deleteCliente,

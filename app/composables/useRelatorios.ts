@@ -120,9 +120,9 @@ export const useRelatorios = () => {
   }
   
   return {
-    relatorios: readonly(relatorios),
-    isLoading: readonly(isLoading),
-    error: readonly(error),
+    relatorios,
+    isLoading,
+    error,
     fetchRelatorios,
     addRelatorio,
     deleteRelatorio,
