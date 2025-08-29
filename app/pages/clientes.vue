@@ -31,11 +31,11 @@ if (isClient) {
 
 <template>
   <div>
-    <!-- Loading enquanto carrega -->
+    <!-- Loading padronizado igual ao dashboard -->
     <AppLoading 
       v-if="isLoading" 
       title="Carregando Clientes"
-      description="Preparando a área de clientes..."
+      description="Preparando visão geral dos clientes..."
     />
     
     <!-- Página de Clientes quando carregado -->
