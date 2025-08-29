@@ -71,10 +71,11 @@
             class="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
           >
             <option value="">Todas as empresas</option>
-            <option value="VIVO">VIVO</option>
-            <option value="TIM">TIM</option>
-            <option value="CLARO">CLARO</option>
-            <option value="OI">OI</option>
+            <option value="Vivo">Vivo</option>
+            <option value="Tim">Tim</option>
+            <option value="Claro">Claro</option>
+            <option value="Oi">Oi</option>
+            <option value="Casas Bahia">Casas Bahia</option>
           </select>
         </div>
       </div>
@@ -157,7 +158,7 @@
             </thead>
             <tbody>
               <tr 
-                v-for="relatorio in (relatoriosFiltrados ? relatoriosFiltrados.slice(0, relatoriosVisiveis) : [])" 
+                v-for="relatorio in (relatoriosOrdenados ? relatoriosOrdenados.slice(0, relatoriosVisiveis) : [])" 
                 :key="relatorio.id"
                 class="border-b border-border/50 hover:bg-muted/30 transition-colors"
               >
@@ -229,6 +230,7 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 // Interface para relatório
 interface Relatorio {
   id: string
@@ -311,10 +313,21 @@ const relatoriosFiltrados = computed(() => {
   }
 
   if (filtros.value.empresa) {
-    resultado = resultado.filter(r => r.nome_empresa === filtros.value.empresa)
+    resultado = resultado.filter(r =>
+      r.nome_empresa && filtros.value.empresa &&
+      r.nome_empresa.toLowerCase() === filtros.value.empresa.toLowerCase()
+    )
   }
 
   return resultado
+})
+
+// Computed para ordenar relatórios por data de criação (mais novos no topo)
+const relatoriosOrdenados = computed(() => {
+  return relatoriosFiltrados.value ? [...relatoriosFiltrados.value].sort((a, b) => {
+    if (!a.created_at || !b.created_at) return 0
+    return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+  }) : []
 })
 
 // Função para recarregar relatórios
