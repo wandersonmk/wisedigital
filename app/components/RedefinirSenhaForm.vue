@@ -35,6 +35,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useToastSafe } from '~/composables/useToastSafe'
 
 const password = ref('')
 const confirmPassword = ref('')
@@ -81,12 +82,15 @@ async function handleSubmit() {
       })
     })
     if (res.ok) {
-      // @ts-ignore
-      if (window.$toast) window.$toast.success('Senha alterada com sucesso!')
-      else alert('Senha alterada com sucesso!')
-      setTimeout(() => {
-        router.push('/login')
-      }, 1200)
+      // Toast de sucesso
+      const toast = await useToastSafe()
+      if (toast) {
+        toast.success('Senha alterada com sucesso!')
+      } else {
+        alert('Senha alterada com sucesso!')
+      }
+      // Redireciona imediatamente para login
+      router.push('/login')
     } else {
       const data = await res.json()
       error.value = data?.msg || 'Erro ao redefinir senha. Tente novamente.'
