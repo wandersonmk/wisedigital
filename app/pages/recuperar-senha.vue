@@ -48,6 +48,7 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
+import { useRouter } from 'vue-router'
 
 definePageMeta({
   layout: 'auth',
@@ -56,6 +57,8 @@ definePageMeta({
 
 const email = ref('')
 const isLoading = ref(false)
+const showModal = ref(false)
+const router = useRouter()
 
 // Validações em tempo real
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -84,7 +87,7 @@ const handleSubmit = async () => {
       body: JSON.stringify({ email: email.value })
     })
     if (res.ok) {
-      alert('Instruções de redefinição de senha enviadas para seu email.')
+      showModal.value = true
     } else {
       const data = await res.json()
       alert(data?.msg || 'Erro ao enviar instruções. Tente novamente.')

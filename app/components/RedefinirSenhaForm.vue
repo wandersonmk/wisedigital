@@ -56,7 +56,13 @@ async function handleSubmit() {
   isLoading.value = true
   try {
     // Token de redefinição de senha (do Supabase)
-    const accessToken = route.query.access_token || ''
+    let accessToken = route.query.access_token as string | undefined
+    // Se não veio na query, tenta pegar do hash
+    if (!accessToken && window && window.location.hash) {
+      const hash = window.location.hash.substring(1) // remove o #
+      const params = new URLSearchParams(hash)
+      accessToken = params.get('access_token') || undefined
+    }
     if (!accessToken) {
       error.value = 'Token de redefinição inválido.'
       isLoading.value = false
@@ -75,7 +81,9 @@ async function handleSubmit() {
       // @ts-ignore
       if (window.$toast) window.$toast.success('Senha alterada com sucesso!')
       else alert('Senha alterada com sucesso!')
-      router.push('/login')
+      setTimeout(() => {
+        router.push('/login')
+      }, 1200)
     } else {
       const data = await res.json()
       error.value = data?.msg || 'Erro ao redefinir senha. Tente novamente.'
