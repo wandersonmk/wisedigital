@@ -17,7 +17,10 @@ export interface ClienteInput {
 }
 
 export const useClientes = () => {
-  const supabase = useSupabaseClient()
+  let supabase: any = null
+  if (typeof window !== 'undefined') {
+    supabase = useSupabaseClient()
+  }
 
   // Estados reativos
   const clientes = ref<Cliente[]>([])

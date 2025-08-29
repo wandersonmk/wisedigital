@@ -1,5 +1,8 @@
 export const useRelatorios = () => {
-  const supabase = useSupabaseClient()
+  let supabase: any = null
+  if (typeof window !== 'undefined') {
+    supabase = useSupabaseClient()
+  }
   
   // Interface para o relatório
   interface Relatorio {
