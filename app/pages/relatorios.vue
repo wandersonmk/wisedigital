@@ -5,23 +5,23 @@ definePageMeta({
   layout: 'dashboard'
 })
 
-// Estado de carregamento
+import { useRelatorios } from '../composables/useRelatorios'
+
 const isLoading = ref(true)
-let authLoading: any = ref(false)
+const error = ref('')
 const isClient = typeof window !== 'undefined'
 
+let relatorios = ref([])
 if (isClient) {
-  // Só executa useAuth no cliente
-  const auth = useAuth()
-  authLoading = auth.isLoading
-
+  const { relatorios: relatoriosRef, fetchRelatorios } = useRelatorios()
+  relatorios = relatoriosRef // usa o ref do composable diretamente
   onMounted(async () => {
-    // Aguarda o auth loading terminar
-    while (authLoading.value) {
-      await new Promise(resolve => setTimeout(resolve, 50))
+    isLoading.value = true
+    try {
+      await fetchRelatorios()
+    } catch (e) {
+      error.value = 'Erro ao carregar relatórios.'
     }
-    // Delay reduzido para carregamento mais rápido
-    await new Promise(resolve => setTimeout(resolve, 300))
     isLoading.value = false
   })
 } else {
@@ -40,8 +40,9 @@ if (isClient) {
     
     <!-- Página de Relatórios quando carregado -->
     <div v-else class="space-y-6">
-  <RelatoriosManager v-if="isClient" />
-  <div v-else class="text-center text-muted-foreground">Carregando...</div>
+      <RelatoriosManager v-if="isClient" :relatorios="relatorios" />
+      <div v-else class="text-center text-muted-foreground">Carregando...</div>
+      <div v-if="error" class="text-red-500 text-center">{{ error }}</div>
     </div>
   </div>
 </template>
