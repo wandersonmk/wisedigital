@@ -31,17 +31,15 @@ if (isClient) {
 
 <template>
   <div>
-    <!-- Loading enquanto carrega -->
+    <!-- Sempre mostra loading até o client terminar de carregar -->
     <AppLoading 
-      v-if="isLoading" 
+      v-if="isLoading || !isClient" 
       title="Carregando Configurações"
       description="Preparando a área de configurações..."
     />
-    
-    <!-- Página de Configurações quando carregado -->
+    <!-- Conteúdo só aparece após carregamento client-side -->
     <div v-else class="space-y-6">
-  <ConfiguracoesManager v-if="isClient" />
-  <div v-else class="text-center text-muted-foreground">Carregando...</div>
+      <ConfiguracoesManager />
     </div>
   </div>
 </template>

@@ -31,17 +31,15 @@ if (isClient) {
 
 <template>
   <div>
-    <!-- Loading padronizado igual ao dashboard -->
+    <!-- Sempre mostra loading até o client buscar os dados -->
     <AppLoading 
-      v-if="isLoading" 
+      v-if="isLoading || !isClient" 
       title="Carregando Clientes"
       description="Preparando visão geral dos clientes..."
     />
-    
-    <!-- Página de Clientes quando carregado -->
+    <!-- Conteúdo só aparece após carregamento client-side -->
     <div v-else class="space-y-6">
-      <ClientesManager v-if="isClient" :clientes="clientes" />
-      <div v-else class="text-center text-muted-foreground">Carregando...</div>
+      <ClientesManager :clientes="clientes" />
       <div v-if="error" class="text-red-500 text-center">{{ error }}</div>
     </div>
   </div>
