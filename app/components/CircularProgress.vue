@@ -1,7 +1,7 @@
 <template>
   <div class="bg-card text-card-foreground rounded-lg border border-border shadow-sm p-6">
-    <h3 class="text-lg font-semibold text-foreground mb-6">Visão geral dos tickets</h3>
-    
+    <h3 class="text-lg font-semibold text-foreground mb-6">Visão geral de Clientes</h3>
+
     <!-- Gráfico Circular Principal -->
     <div class="flex flex-col items-center mb-8">
       <div class="relative w-48 h-48 mb-6">
@@ -46,7 +46,7 @@
         <!-- Texto central -->
         <div class="absolute inset-0 flex flex-col items-center justify-center">
           <div class="text-4xl font-bold text-foreground">{{ displayTotal }}</div>
-          <div class="text-[10px] text-gray-400 uppercase tracking-wide font-medium">TICKETS TOTAIS</div>
+          <div class="text-[10px] text-gray-400 uppercase tracking-wide font-medium">CLIENTES TOTAIS</div>
         </div>
       </div>
     </div>
@@ -54,7 +54,7 @@
     <!-- Barra de Progresso Mensal -->
     <div>
       <div class="flex justify-between text-sm mb-2">
-        <span class="text-gray-400 uppercase tracking-wide">TICKETS</span>
+        <span class="text-gray-400 uppercase tracking-wide">CLIENTES</span>
         <span class="text-foreground font-medium">{{ displayTotal }}</span>
       </div>
       <div class="relative h-3 bg-muted rounded-full overflow-hidden">
@@ -69,7 +69,7 @@
         ></div>
       </div>
       <div class="flex justify-center text-xs text-gray-400 mt-2">
-        <span>Tickets atendidos</span>
+        <span>Clientes atendidos</span>
       </div>
     </div>
   </div>
