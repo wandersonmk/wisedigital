@@ -91,7 +91,7 @@
             </thead>
             <tbody>
               <tr 
-                v-for="cliente in (clientes ? clientes.slice(0, clientesVisiveis) : [])" 
+                v-for="cliente in (clientesOrdenados ? clientesOrdenados.slice(0, clientesVisiveis) : [])" 
                 :key="cliente.id"
                 class="border-b border-border/50 hover:bg-muted/30 transition-colors"
               >
@@ -464,4 +464,13 @@ const exportToExcel = async () => {
     alert('Erro ao exportar Excel. Tente novamente.')
   }
 }
+
+// Computed para clientes ordenados por nome (A-Z)
+import { computed } from 'vue'
+const clientesOrdenados = computed(() => {
+  return clientes.value ? [...clientes.value].sort((a, b) => {
+    if (!a.nome || !b.nome) return 0
+    return a.nome.localeCompare(b.nome, 'pt-BR', { sensitivity: 'base' })
+  }) : []
+})
 </script>
