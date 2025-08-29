@@ -1,6 +1,6 @@
 <template>
   <div class="bg-card text-card-foreground rounded-lg border border-border shadow-sm p-6">
-    <h3 class="text-lg font-semibold text-foreground mb-6">Visão geral de Clientes</h3>
+    <h3 class="text-lg font-semibold text-foreground mb-6">Visão geral de clientes</h3>
 
     <!-- Gráfico Circular Principal -->
     <div class="flex flex-col items-center mb-8">
