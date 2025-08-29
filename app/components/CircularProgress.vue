@@ -69,7 +69,7 @@
         ></div>
       </div>
       <div class="flex justify-center text-xs text-gray-400 mt-2">
-        <span>Clientes atendidos</span>
+        <span>Clientes atendidos em todo período</span>
       </div>
     </div>
   </div>
