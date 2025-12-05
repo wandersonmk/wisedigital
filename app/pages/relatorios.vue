@@ -5,22 +5,23 @@ definePageMeta({
   layout: 'dashboard'
 })
 
-import { useRelatorios } from '../composables/useRelatorios'
-
+// Estado de carregamento
 const isLoading = ref(true)
-const error = ref('')
+let authLoading: any = ref(false)
 const isClient = typeof window !== 'undefined'
 
-let relatorios = ref([])
 if (isClient) {
-  const { relatorios, fetchRelatorios } = useRelatorios()
+  // Só executa useAuth no cliente
+  const auth = useAuth()
+  authLoading = auth.isLoading
+
   onMounted(async () => {
-    isLoading.value = true
-    try {
-      await fetchRelatorios()
-    } catch (e) {
-      error.value = 'Erro ao carregar relatórios.'
+    // Aguarda o auth loading terminar
+    while (authLoading.value) {
+      await new Promise(resolve => setTimeout(resolve, 50))
     }
+    // Delay adicional para garantir carregamento suave
+    await new Promise(resolve => setTimeout(resolve, 500))
     isLoading.value = false
   })
 } else {
@@ -30,16 +31,15 @@ if (isClient) {
 
 <template>
   <div>
-    <!-- Sempre mostra loading até o client buscar os dados -->
+    <!-- Sempre mostra loading até o client terminar de carregar -->
     <AppLoading 
       v-if="isLoading || !isClient" 
       title="Carregando Relatórios"
-      description="Preparando visão geral dos relatórios..."
+      description="Preparando a área de relatórios de tickets..."
     />
     <!-- Conteúdo só aparece após carregamento client-side -->
     <div v-else class="space-y-6">
-      <RelatoriosManager :relatorios="relatorios" />
-      <div v-if="error" class="text-red-500 text-center">{{ error }}</div>
+      <RelatoriosManager />
     </div>
   </div>
 </template>

@@ -5,22 +5,23 @@ definePageMeta({
   layout: 'dashboard'
 })
 
-import { useClientes } from '../composables/useClientes'
-
+// Estado de carregamento
 const isLoading = ref(true)
-const error = ref('')
+let authLoading: any = ref(false)
 const isClient = typeof window !== 'undefined'
 
-let clientes = ref([])
 if (isClient) {
-  const { clientes, fetchClientes } = useClientes()
+  // Só executa useAuth no cliente
+  const auth = useAuth()
+  authLoading = auth.isLoading
+
   onMounted(async () => {
-    isLoading.value = true
-    try {
-      await fetchClientes()
-    } catch (e) {
-      error.value = 'Erro ao carregar clientes.'
+    // Aguarda o auth loading terminar
+    while (authLoading.value) {
+      await new Promise(resolve => setTimeout(resolve, 50))
     }
+    // Delay adicional para garantir carregamento suave
+    await new Promise(resolve => setTimeout(resolve, 500))
     isLoading.value = false
   })
 } else {
@@ -30,16 +31,15 @@ if (isClient) {
 
 <template>
   <div>
-    <!-- Sempre mostra loading até o client buscar os dados -->
+    <!-- Sempre mostra loading até o client terminar de carregar -->
     <AppLoading 
       v-if="isLoading || !isClient" 
       title="Carregando Clientes"
-      description="Preparando visão geral dos clientes..."
+      description="Preparando a área de gerenciamento de clientes..."
     />
     <!-- Conteúdo só aparece após carregamento client-side -->
     <div v-else class="space-y-6">
-      <ClientesManager :clientes="clientes" />
-      <div v-if="error" class="text-red-500 text-center">{{ error }}</div>
+      <ClientesManager />
     </div>
   </div>
 </template>
