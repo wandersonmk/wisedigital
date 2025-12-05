@@ -22,7 +22,7 @@
           @click="mostrarModalProduto = true"
           class="px-3 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors text-sm"
         >
-          <font-awesome-icon icon="plus" class="w-4 h-4 mr-2" />
+          <Icon icon="plus" class-name="w-4 h-4 mr-2" fallback="" />
           Novo Produto
         </button>
       </div>
@@ -44,7 +44,7 @@
             class="w-full h-full object-cover"
           />
           <div v-else class="w-full h-full flex items-center justify-center">
-            <font-awesome-icon icon="image" class="w-12 h-12 text-muted-foreground" />
+            <Icon icon="image" class-name="w-12 h-12 text-muted-foreground" fallback="" />
           </div>
           
           <!-- Badge do tipo -->
@@ -133,7 +133,7 @@
               @click="editarProduto(produto)"
               class="flex-1 px-3 py-2 text-sm bg-muted hover:bg-muted/80 text-foreground rounded-lg transition-colors"
             >
-              <font-awesome-icon icon="edit" class="w-4 h-4 mr-2" />
+              <Icon icon="edit" class-name="w-4 h-4 mr-2" fallback="" />
               Editar
             </button>
             <button
@@ -145,10 +145,7 @@
                   : 'bg-green-100 hover:bg-green-200 text-green-700'
               ]"
             >
-              <font-awesome-icon 
-                :icon="produto.ativo ? 'eye-slash' : 'eye'" 
-                class="w-4 h-4 mr-2" 
-              />
+              <Icon :icon="produto.ativo ? 'eye-slash' : 'eye'" class-name="w-4 h-4 mr-2" fallback="" />
               {{ produto.ativo ? 'Desativar' : 'Ativar' }}
             </button>
           </div>
@@ -161,7 +158,7 @@
         class="border-2 border-dashed border-muted-foreground/30 rounded-lg p-6 hover:border-primary/50 hover:bg-primary/5 transition-colors cursor-pointer flex flex-col items-center justify-center text-center min-h-[300px]"
       >
         <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-3">
-          <font-awesome-icon icon="plus" class="w-6 h-6 text-primary" />
+          <Icon icon="plus" class-name="w-6 h-6 text-primary" fallback="" />
         </div>
         <h4 class="font-medium text-foreground mb-1">Novo Produto</h4>
         <p class="text-sm text-muted-foreground">Adicione produtos ao seu cardápio</p>
@@ -250,3 +247,4 @@ const salvarProduto = (dadosProduto: Omit<Produto, 'id'>) => {
   overflow: hidden;
 }
 </style>
+

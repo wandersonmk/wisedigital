@@ -5,20 +5,6 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   }
   
   try {
-    // Verificar primeiro se há email salvo no localStorage
-    const savedEmail = localStorage.getItem('user_email')
-    
-    console.log('Guest middleware - Verificação localStorage:', { 
-      hasSavedEmail: !!savedEmail,
-      savedEmail 
-    })
-    
-    // Se não há email salvo, permite acesso à página de login
-    if (!savedEmail) {
-      console.log('Guest middleware: Sem email salvo, permitindo acesso ao login')
-      return
-    }
-    
     const { isAuthenticated, user, isLoading } = useAuth()
     
     console.log('Guest middleware - Estado auth:', { 
@@ -40,11 +26,14 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
       email: user.value?.email 
     })
     
-    // Se já está autenticado OU tem email salvo, redireciona para a página principal
-    if ((isAuthenticated.value && user.value) || savedEmail) {
-      console.log('Guest middleware: Redirecionando para /')
+    // APENAS redireciona se estiver REALMENTE autenticado (com sessão válida)
+    if (isAuthenticated.value && user.value) {
+      console.log('Guest middleware: Usuário autenticado, redirecionando para /')
       return navigateTo('/')
     }
+    
+    // Se não estiver autenticado, permite acesso à página de login
+    console.log('Guest middleware: Usuário não autenticado, permitindo acesso ao login')
   } catch (error) {
     // Se houver erro na inicialização, permite acesso à página de login
     console.error('Erro no middleware guest:', error)

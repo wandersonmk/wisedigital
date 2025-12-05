@@ -31,10 +31,7 @@
               class="flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-muted group relative"
               :class="$route.path === '/' ? 'bg-primary text-primary-foreground' : 'text-foreground/80 hover:text-foreground'"
             >
-              <font-awesome-icon 
-                icon="home" 
-                class="w-5 h-5 mr-3" 
-              />
+              <Icon icon="home" class-name="w-5 h-5 mr-3" fallback="" />
               <span>Dashboard</span>
             </NuxtLink>
           </li>
@@ -46,10 +43,7 @@
               class="flex items-center w-full px-3 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-muted group relative"
               :class="$route.path === '/clientes' ? 'bg-primary text-primary-foreground' : 'text-foreground/80 hover:text-foreground'"
             >
-              <font-awesome-icon 
-                icon="users" 
-                class="w-5 h-5 mr-3" 
-              />
+              <Icon icon="users" class-name="w-5 h-5 mr-3" fallback="" />
               <span>Clientes</span>
             </NuxtLink>
           </li>
@@ -61,10 +55,7 @@
               class="flex items-center w-full px-3 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-muted group relative"
               :class="$route.path === '/relatorios' ? 'bg-primary text-primary-foreground' : 'text-foreground/80 hover:text-foreground'"
             >
-              <font-awesome-icon 
-                icon="file-alt" 
-                class="w-5 h-5 mr-3" 
-              />
+              <Icon icon="life-ring" class-name="w-5 h-5 mr-3" fallback="🆘" />
               <span>Relatórios</span>
             </NuxtLink>
           </li>
@@ -76,10 +67,7 @@
               class="flex items-center w-full px-3 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-muted group relative"
               :class="$route.path === '/configuracoes' ? 'bg-primary text-primary-foreground' : 'text-foreground/80 hover:text-foreground'"
             >
-              <font-awesome-icon 
-                icon="cog" 
-                class="w-5 h-5 mr-3" 
-              />
+              <Icon icon="cog" class-name="w-5 h-5 mr-3" fallback="" />
               <span>Configurações</span>
             </NuxtLink>
           </li>
@@ -91,10 +79,7 @@
               class="flex items-center w-full px-3 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-muted group relative"
               :class="$route.path === '/ajuda' ? 'bg-primary text-primary-foreground' : 'text-foreground/80 hover:text-foreground'"
             >
-              <font-awesome-icon 
-                icon="question-circle" 
-                class="w-5 h-5 mr-3" 
-              />
+              <Icon icon="question-circle" class-name="w-5 h-5 mr-3" fallback="" />
               <span>Ajuda</span>
             </NuxtLink>
           </li>
@@ -174,10 +159,7 @@
               class="flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-muted group relative"
               :class="$route.path === '/' ? 'bg-primary text-primary-foreground' : 'text-foreground/80 hover:text-foreground'"
             >
-              <font-awesome-icon 
-                icon="home" 
-                class="w-5 h-5 mr-3" 
-              />
+              <Icon icon="home" class-name="w-5 h-5 mr-3" fallback="" />
               <span>Dashboard</span>
             </NuxtLink>
           </li>
@@ -190,10 +172,7 @@
               class="flex items-center w-full px-3 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-muted group relative"
               :class="$route.path === '/clientes' ? 'bg-primary text-primary-foreground' : 'text-foreground/80 hover:text-foreground'"
             >
-              <font-awesome-icon 
-                icon="users" 
-                class="w-5 h-5 mr-3" 
-              />
+              <Icon icon="users" class-name="w-5 h-5 mr-3" fallback="" />
               <span>Clientes</span>
             </NuxtLink>
           </li>
@@ -206,10 +185,7 @@
               class="flex items-center w-full px-3 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-muted group relative"
               :class="$route.path === '/relatorios' ? 'bg-primary text-primary-foreground' : 'text-foreground/80 hover:text-foreground'"
             >
-              <font-awesome-icon 
-                icon="file-alt" 
-                class="w-5 h-5 mr-3" 
-              />
+              <Icon icon="file-alt" class-name="w-5 h-5 mr-3" fallback="" />
               <span>Relatórios</span>
             </NuxtLink>
           </li>
@@ -222,10 +198,7 @@
               class="flex items-center w-full px-3 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-muted group relative"
               :class="$route.path === '/configuracoes' ? 'bg-primary text-primary-foreground' : 'text-foreground/80 hover:text-foreground'"
             >
-              <font-awesome-icon 
-                icon="cog" 
-                class="w-5 h-5 mr-3" 
-              />
+              <Icon icon="cog" class-name="w-5 h-5 mr-3" fallback="" />
               <span>Configurações</span>
             </NuxtLink>
           </li>
@@ -238,10 +211,7 @@
               class="flex items-center w-full px-3 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-muted group relative"
               :class="$route.path === '/ajuda' ? 'bg-primary text-primary-foreground' : 'text-foreground/80 hover:text-foreground'"
             >
-              <font-awesome-icon 
-                icon="question-circle" 
-                class="w-5 h-5 mr-3" 
-              />
+              <Icon icon="question-circle" class-name="w-5 h-5 mr-3" fallback="" />
               <span>Ajuda</span>
             </NuxtLink>
           </li>
@@ -377,3 +347,4 @@ const checkUserSession = () => {
   }
 }
 </script>
+

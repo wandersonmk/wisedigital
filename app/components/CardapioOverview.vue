@@ -13,10 +13,7 @@
             <p class="text-xs text-green-600 mt-1">+3 novos esta semana</p>
           </div>
           <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center shadow-lg">
-            <font-awesome-icon 
-              icon="utensils" 
-              class="w-6 h-6 text-white" 
-            />
+            <Icon icon="utensils" class-name="w-6 h-6 text-white" fallback="" />
           </div>
         </div>
       </div>
@@ -185,3 +182,4 @@ const getStatusClass = (status: string) => {
   }
 }
 </script>
+

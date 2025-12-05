@@ -17,7 +17,7 @@
           class="flex items-center space-x-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors text-sm font-medium"
           title="Exportar para PDF"
         >
-          <font-awesome-icon icon="file-pdf" class="w-4 h-4" />
+          <Icon icon="file-pdf" class-name="w-4 h-4" fallback="" />
           <span>PDF</span>
         </button>
         
@@ -26,7 +26,7 @@
           class="flex items-center space-x-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors text-sm font-medium"
           title="Exportar para Excel"
         >
-          <font-awesome-icon icon="file-excel" class="w-4 h-4" />
+          <Icon icon="file-excel" class-name="w-4 h-4" fallback="" />
           <span>Excel</span>
         </button>
       </div>
@@ -50,10 +50,7 @@
       <!-- Error state -->
       <div v-else-if="error" class="text-center py-8">
         <div class="flex flex-col items-center">
-          <font-awesome-icon 
-            icon="exclamation-triangle" 
-            class="w-12 h-12 text-red-500 mb-4" 
-          />
+          <Icon icon="exclamation-triangle" class-name="w-12 h-12 text-red-500 mb-4" fallback="" />
           <h3 class="text-lg font-medium text-foreground mb-2">Erro ao carregar clientes</h3>
           <p class="text-muted-foreground mb-4">{{ error }}</p>
           <button
@@ -68,10 +65,7 @@
       <!-- Mensagem quando não há clientes -->
       <div v-else-if="clientes.length === 0" class="text-center py-8">
         <div class="flex flex-col items-center">
-          <font-awesome-icon 
-            icon="users" 
-            class="w-12 h-12 text-muted-foreground/50 mb-4" 
-          />
+          <Icon icon="users" class-name="w-12 h-12 text-muted-foreground/50 mb-4" fallback="" />
           <h3 class="text-lg font-medium text-foreground mb-2">Nenhum cliente encontrado</h3>
           <p class="text-muted-foreground">Quando você tiver clientes, eles aparecerão aqui.</p>
         </div>
@@ -99,7 +93,7 @@
                 <td class="py-3 px-3">
                   <div class="flex items-center">
                     <div class="w-6 h-6 bg-primary/10 rounded-full flex items-center justify-center mr-2">
-                      <font-awesome-icon icon="user" class="w-3 h-3 text-primary" />
+                      <Icon icon="user" class-name="w-3 h-3 text-primary" fallback="" />
                     </div>
                     <span class="font-medium text-foreground text-sm">{{ cliente.nome }}</span>
                   </div>
@@ -124,10 +118,7 @@
                       class="p-2 text-green-500 hover:text-green-600 hover:bg-green-50 dark:hover:bg-green-900/20 rounded-lg transition-all duration-200 group"
                       title="Conversar no WhatsApp"
                     >
-                      <font-awesome-icon 
-                        icon="comments" 
-                        class="w-4 h-4 group-hover:scale-110 transition-transform duration-200" 
-                      />
+                      <Icon icon="comments" class-name="w-4 h-4 group-hover:scale-110 transition-transform duration-200" fallback="" />
                     </button>
                     
                     <!-- Botão de excluir -->
@@ -136,10 +127,7 @@
                       class="p-2 text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all duration-200 group"
                       title="Excluir cliente"
                     >
-                      <font-awesome-icon 
-                        icon="trash" 
-                        class="w-4 h-4 group-hover:scale-110 transition-transform duration-200" 
-                      />
+                      <Icon icon="trash" class-name="w-4 h-4 group-hover:scale-110 transition-transform duration-200" fallback="" />
                     </button>
                   </div>
                 </td>
@@ -164,7 +152,7 @@
     >
       <div class="bg-card rounded-lg shadow-xl max-w-md w-full p-6 border border-border">
         <div class="flex items-center justify-center w-12 h-12 mx-auto mb-4 bg-red-100 dark:bg-red-900/20 rounded-full">
-          <font-awesome-icon icon="exclamation-triangle" class="w-6 h-6 text-red-600" />
+          <Icon icon="exclamation-triangle" class-name="w-6 h-6 text-red-600" fallback="" />
         </div>
         
         <h3 class="text-lg font-semibold text-foreground text-center mb-2">
@@ -474,3 +462,4 @@ const clientesOrdenados = computed(() => {
   }) : []
 })
 </script>
+

@@ -30,6 +30,14 @@ export default defineNuxtPlugin(async () => {
       
       if (error) {
         console.error('[Auth Plugin] Erro ao obter sessão:', error)
+        
+        // Se o erro é de refresh token inválido, limpar tudo
+        if (error.message?.includes('Refresh Token')) {
+          console.log('[Auth Plugin] Refresh token inválido, limpando localStorage...')
+          localStorage.clear()
+          user.value = null
+          session.value = null
+        }
       } else {
         console.log('[Auth Plugin] Sessão obtida:', { hasSession: !!data.session })
         

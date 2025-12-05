@@ -15,7 +15,7 @@
           class="flex items-center space-x-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors text-sm font-medium"
           title="Exportar para PDF"
         >
-          <font-awesome-icon icon="file-pdf" class="w-4 h-4" />
+          <Icon icon="file-pdf" class-name="w-4 h-4" fallback="" />
           <span>PDF</span>
         </button>
         <button
@@ -23,7 +23,7 @@
           class="flex items-center space-x-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors text-sm font-medium"
           title="Exportar para Excel"
         >
-          <font-awesome-icon icon="file-excel" class="w-4 h-4" />
+          <Icon icon="file-excel" class-name="w-4 h-4" fallback="" />
           <span>Excel</span>
         </button>
       </div>
@@ -86,7 +86,7 @@
           @click="limparFiltros"
           class="flex items-center space-x-2 px-4 py-2 border border-border text-foreground hover:bg-muted rounded-lg transition-colors text-sm font-medium"
         >
-          <font-awesome-icon icon="times-circle" class="w-4 h-4" />
+          <Icon icon="times-circle" class-name="w-4 h-4" fallback="" />
           <span>Limpar Filtros</span>
         </button>
       </div>
@@ -110,10 +110,7 @@
       <!-- Error state -->
       <div v-else-if="error" class="text-center py-8">
         <div class="flex flex-col items-center">
-          <font-awesome-icon 
-            icon="exclamation-triangle" 
-            class="w-12 h-12 text-red-500 mb-4" 
-          />
+          <Icon icon="exclamation-triangle" class-name="w-12 h-12 text-red-500 mb-4" fallback="" />
           <h3 class="text-lg font-medium text-foreground mb-2">Erro ao carregar relatórios</h3>
           <p class="text-muted-foreground mb-4">{{ error }}</p>
           <button
@@ -128,10 +125,7 @@
       <!-- Mensagem quando não há relatórios -->
       <div v-else-if="relatoriosFiltrados.length === 0" class="text-center py-8">
         <div class="flex flex-col items-center">
-          <font-awesome-icon 
-            icon="file-alt" 
-            class="w-12 h-12 text-muted-foreground/50 mb-4" 
-          />
+          <Icon icon="file-alt" class-name="w-12 h-12 text-muted-foreground/50 mb-4" fallback="" />
           <h3 class="text-lg font-medium text-foreground mb-2">
             {{ filtrosAplicados ? 'Nenhum relatório encontrado' : 'Nenhum relatório disponível' }}
           </h3>
@@ -166,7 +160,7 @@
                 <td class="py-3 px-3">
                   <div class="flex items-center">
                     <div class="w-6 h-6 bg-primary/10 rounded-full flex items-center justify-center mr-2">
-                      <font-awesome-icon icon="user" class="w-3 h-3 text-primary" />
+                      <Icon icon="user" class-name="w-3 h-3 text-primary" fallback="" />
                     </div>
                     <span class="font-medium text-foreground text-sm">{{ relatorio.nome_pessoa }}</span>
                   </div>
@@ -781,3 +775,4 @@ watch(
   cursor: pointer;
 }
 </style>
+

@@ -69,6 +69,15 @@ library.add(
   faTicket
 )
 
-export default defineNuxtPlugin((nuxtApp) => {
-  nuxtApp.vueApp.component('font-awesome-icon', FontAwesomeIcon)
+export default defineNuxtPlugin({
+  name: 'fontawesome',
+  parallel: false,
+  setup(nuxtApp) {
+    if (process.client) {
+      console.log('[FontAwesome Plugin] Registrando componente...')
+      nuxtApp.vueApp.component('font-awesome-icon', FontAwesomeIcon)
+      nuxtApp.vueApp.component('FontAwesomeIcon', FontAwesomeIcon)
+      console.log('[FontAwesome Plugin] Componente registrado com sucesso')
+    }
+  }
 })

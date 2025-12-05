@@ -11,14 +11,14 @@
           @click="mostrarModalCategoria = true"
           class="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
         >
-          <font-awesome-icon icon="plus" class="w-4 h-4 mr-2" />
+          <Icon icon="plus" class-name="w-4 h-4 mr-2" fallback="" />
           Nova Categoria
         </button>
         <button
           @click="mostrarModalComplemento = true"
           class="px-4 py-2 bg-secondary text-secondary-foreground rounded-lg hover:bg-secondary/90 transition-colors"
         >
-          <font-awesome-icon icon="puzzle-piece" class="w-4 h-4 mr-2" />
+          <Icon icon="puzzle-piece" class-name="w-4 h-4 mr-2" fallback="" />
           Novo Complemento
         </button>
       </div>
@@ -35,7 +35,7 @@
             <p class="text-xs text-green-600 mt-1">{{ produtos.filter(p => p.ativo).length }} ativos</p>
           </div>
           <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center">
-            <font-awesome-icon icon="utensils" class="w-6 h-6 text-white" />
+            <Icon icon="utensils" class-name="w-6 h-6 text-white" fallback="" />
           </div>
         </div>
       </div>
@@ -49,7 +49,7 @@
             <p class="text-xs text-green-600 mt-1">bem organizadas</p>
           </div>
           <div class="w-12 h-12 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-lg flex items-center justify-center">
-            <font-awesome-icon icon="layer-group" class="w-6 h-6 text-white" />
+            <Icon icon="layer-group" class-name="w-6 h-6 text-white" fallback="" />
           </div>
         </div>
       </div>
@@ -63,7 +63,7 @@
             <p class="text-xs text-blue-600 mt-1">{{ complementos.filter(c => c.disponivel).length }} disponíveis</p>
           </div>
           <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center">
-            <font-awesome-icon icon="puzzle-piece" class="w-6 h-6 text-white" />
+            <Icon icon="puzzle-piece" class-name="w-6 h-6 text-white" fallback="" />
           </div>
         </div>
       </div>
@@ -77,7 +77,7 @@
             <p class="text-xs text-yellow-600 mt-1">valor competitivo</p>
           </div>
           <div class="w-12 h-12 bg-gradient-to-br from-amber-500 to-amber-600 rounded-lg flex items-center justify-center">
-            <font-awesome-icon icon="dollar-sign" class="w-6 h-6 text-white" />
+            <Icon icon="dollar-sign" class-name="w-6 h-6 text-white" fallback="" />
           </div>
         </div>
       </div>
@@ -98,7 +98,7 @@
                 : 'border-transparent text-muted-foreground hover:text-foreground hover:border-border'
             ]"
           >
-            <font-awesome-icon :icon="tab.icone" class="w-4 h-4 mr-2" />
+            <Icon :icon="tab.icone" class-name="w-4 h-4 mr-2" fallback="" />
             {{ tab.nome }}
           </button>
         </nav>
@@ -174,3 +174,4 @@ const handleSalvarComplemento = (complemento: Omit<Complemento, 'id'>) => {
   mostrarModalComplemento.value = false
 }
 </script>
+

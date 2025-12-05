@@ -61,3 +61,4 @@ function setActiveTab(tab: 'login' | 'register') {
   opacity: 0;
 }
 </style>
+

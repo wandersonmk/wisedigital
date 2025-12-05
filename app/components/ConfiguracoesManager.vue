@@ -4,10 +4,7 @@
     <div class="flex items-center justify-between p-6 border-b border-border">
       <div class="flex items-center space-x-3">
         <div class="w-10 h-10 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center">
-          <font-awesome-icon 
-            icon="cog" 
-            class="w-5 h-5 text-white" 
-          />
+          <Icon icon="cog" class-name="w-5 h-5 text-white" fallback="" />
         </div>
         <div>
           <h2 class="text-lg font-semibold text-foreground">Configurações do Sistema</h2>
@@ -22,10 +19,7 @@
       <!-- Seção: Gerenciamento de Dados -->
       <div class="space-y-4">
         <div class="flex items-center space-x-2 mb-4">
-          <font-awesome-icon 
-            icon="database" 
-            class="w-5 h-5 text-muted-foreground" 
-          />
+          <Icon icon="database" class-name="w-5 h-5 text-muted-foreground" fallback="" />
           <h3 class="text-lg font-medium text-foreground">Gerenciamento de Dados</h3>
         </div>
         
@@ -35,10 +29,7 @@
           <div class="bg-muted/30 border border-border rounded-lg p-4">
             <div class="flex items-start space-x-3">
               <div class="w-8 h-8 bg-blue-100 dark:bg-blue-900/20 rounded-lg flex items-center justify-center mt-1">
-                <font-awesome-icon 
-                  icon="users" 
-                  class="w-4 h-4 text-blue-600 dark:text-blue-400" 
-                />
+                <Icon icon="users" class-name="w-4 h-4 text-blue-600 dark:text-blue-400" fallback="" />
               </div>
               <div class="flex-1">
                 <h4 class="font-medium text-foreground mb-1">Limpar Lista de Clientes</h4>
@@ -49,7 +40,7 @@
                   @click="confirmarLimpezaClientes"
                   class="flex items-center space-x-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors text-sm font-medium"
                 >
-                  <font-awesome-icon icon="trash-alt" class="w-4 h-4" />
+                  <Icon icon="trash-alt" class-name="w-4 h-4" fallback="" />
                   <span>Limpar Clientes</span>
                 </button>
               </div>
@@ -60,10 +51,7 @@
           <div class="bg-muted/30 border border-border rounded-lg p-4">
             <div class="flex items-start space-x-3">
               <div class="w-8 h-8 bg-red-100 dark:bg-red-900/20 rounded-lg flex items-center justify-center mt-1">
-                <font-awesome-icon 
-                  icon="file-alt" 
-                  class="w-4 h-4 text-red-600 dark:text-red-400" 
-                />
+                <Icon icon="file-alt" class-name="w-4 h-4 text-red-600 dark:text-red-400" fallback="" />
               </div>
               <div class="flex-1">
                 <h4 class="font-medium text-foreground mb-1">Limpar Todos os Registros de Tickets</h4>
@@ -74,7 +62,7 @@
                   @click="confirmarLimpezaTickets"
                   class="flex items-center space-x-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors text-sm font-medium"
                 >
-                  <font-awesome-icon icon="trash-alt" class="w-4 h-4" />
+                  <Icon icon="trash-alt" class-name="w-4 h-4" fallback="" />
                   <span>Limpar Tickets</span>
                 </button>
               </div>
@@ -87,10 +75,7 @@
       <!-- Aviso importante -->
       <div class="bg-yellow-50 dark:bg-yellow-900/10 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4">
         <div class="flex items-start space-x-3">
-          <font-awesome-icon 
-            icon="exclamation-triangle" 
-            class="w-5 h-5 text-yellow-600 dark:text-yellow-400 mt-0.5" 
-          />
+          <Icon icon="exclamation-triangle" class-name="w-5 h-5 text-yellow-600 dark:text-yellow-400 mt-0.5" fallback="" />
           <div>
             <h4 class="font-medium text-yellow-800 dark:text-yellow-200 mb-1">
               Atenção - Ações Irreversíveis
@@ -111,7 +96,7 @@
     <div class="bg-card border border-border rounded-lg p-6 max-w-md w-full mx-4">
       <div class="flex items-center space-x-3 mb-4">
         <div class="w-10 h-10 bg-blue-100 dark:bg-blue-900/20 rounded-lg flex items-center justify-center">
-          <font-awesome-icon icon="users" class="w-5 h-5 text-blue-600 dark:text-blue-400" />
+          <Icon icon="users" class-name="w-5 h-5 text-blue-600 dark:text-blue-400" fallback="" />
         </div>
         <h3 class="text-lg font-semibold text-foreground">Confirmar Limpeza de Clientes</h3>
       </div>
@@ -142,7 +127,7 @@
     <div class="bg-card border border-border rounded-lg p-6 max-w-md w-full mx-4">
       <div class="flex items-center space-x-3 mb-4">
         <div class="w-10 h-10 bg-red-100 dark:bg-red-900/20 rounded-lg flex items-center justify-center">
-          <font-awesome-icon icon="file-alt" class="w-5 h-5 text-red-600 dark:text-red-400" />
+          <Icon icon="file-alt" class-name="w-5 h-5 text-red-600 dark:text-red-400" fallback="" />
         </div>
         <h3 class="text-lg font-semibold text-foreground">Confirmar Limpeza de Tickets</h3>
       </div>
@@ -230,3 +215,4 @@ async function limparTickets() {
   }
 }
 </script>
+

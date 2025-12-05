@@ -7,7 +7,7 @@
         @click="$emit('novaCategoria')"
         class="px-3 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors text-sm"
       >
-        <font-awesome-icon icon="plus" class="w-4 h-4 mr-2" />
+        <Icon icon="plus" class-name="w-4 h-4 mr-2" fallback="" />
         Nova Categoria
       </button>
     </div>
@@ -22,10 +22,7 @@
         <div class="flex items-start justify-between">
           <div class="flex items-center space-x-3">
             <div class="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
-              <font-awesome-icon 
-                :icon="categoria.icone || 'folder'" 
-                class="w-5 h-5 text-primary"
-              />
+              <Icon :icon="categoria.icone || 'folder'" class-name="w-5 h-5 text-primary" fallback="" />
             </div>
             <div>
               <h4 class="font-medium text-foreground">{{ categoria.nome }}</h4>
@@ -49,13 +46,13 @@
               @click="editarCategoria(categoria)"
               class="p-2 text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors"
             >
-              <font-awesome-icon icon="edit" class="w-4 h-4" />
+              <Icon icon="edit" class-name="w-4 h-4" fallback="" />
             </button>
             <button
               @click="confirmarRemocao(categoria)"
               class="p-2 text-muted-foreground hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
             >
-              <font-awesome-icon icon="trash" class="w-4 h-4" />
+              <Icon icon="trash" class-name="w-4 h-4" fallback="" />
             </button>
           </div>
         </div>
@@ -89,7 +86,7 @@
         class="border-2 border-dashed border-muted-foreground/30 rounded-lg p-4 hover:border-primary/50 hover:bg-primary/5 transition-colors cursor-pointer flex flex-col items-center justify-center text-center min-h-[200px]"
       >
         <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-3">
-          <font-awesome-icon icon="plus" class="w-6 h-6 text-primary" />
+          <Icon icon="plus" class-name="w-6 h-6 text-primary" fallback="" />
         </div>
         <h4 class="font-medium text-foreground mb-1">Nova Categoria</h4>
         <p class="text-sm text-muted-foreground">Organize seus produtos em categorias</p>
@@ -167,3 +164,4 @@ const removerCategoria = () => {
   }
 }
 </script>
+

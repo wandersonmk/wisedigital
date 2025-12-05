@@ -14,3 +14,4 @@
 // Ano atual para o footer
 const currentYear = new Date().getFullYear()
 </script>
+

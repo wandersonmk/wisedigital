@@ -20,7 +20,7 @@
           class="p-1 rounded text-muted-foreground hover:text-foreground transition-colors"
           title="Imprimir pedido"
         >
-          <font-awesome-icon icon="print" class="w-3 h-3" />
+          <Icon icon="print" class-name="w-3 h-3" fallback="" />
         </button>
       </div>
     </div>
@@ -64,7 +64,7 @@
           @click.stop="$emit('accept', pedido.id)"
           class="flex-1 bg-green-600 hover:bg-green-700 text-white px-2 py-1.5 rounded text-xs font-medium transition-colors"
         >
-          <font-awesome-icon icon="check" class="w-3 h-3 mr-1" />
+          <Icon icon="check" class-name="w-3 h-3 mr-1" fallback="" />
           Aceitar
         </button>
       </template>
@@ -74,7 +74,7 @@
           @click.stop="$emit('ready', pedido.id)"
           class="flex-1 bg-orange-600 hover:bg-orange-700 text-white px-2 py-1.5 rounded text-xs font-medium transition-colors"
         >
-          <font-awesome-icon icon="utensils" class="w-3 h-3 mr-1" />
+          <Icon icon="utensils" class-name="w-3 h-3 mr-1" fallback="" />
           Pronto
         </button>
       </template>
@@ -84,14 +84,14 @@
           @click.stop="$emit('complete', pedido.id)"
           class="flex-1 bg-purple-600 hover:bg-purple-700 text-white px-2 py-1.5 rounded text-xs font-medium transition-colors"
         >
-          <font-awesome-icon icon="check-circle" class="w-3 h-3 mr-1" />
+          <Icon icon="check-circle" class-name="w-3 h-3 mr-1" fallback="" />
           Concluir
         </button>
       </template>
 
       <template v-else-if="pedido.status === 'concluido'">
         <div class="flex-1 bg-green-100 text-green-700 px-2 py-1.5 rounded text-xs font-medium text-center">
-          <font-awesome-icon icon="check-circle" class="w-3 h-3 mr-1" />
+          <Icon icon="check-circle" class-name="w-3 h-3 mr-1" fallback="" />
           Concluído
         </div>
       </template>
@@ -193,3 +193,4 @@ const getTimeAgo = (date: Date) => {
   return `${diffInHours}h atrás`
 }
 </script>
+

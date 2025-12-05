@@ -22,7 +22,7 @@
             @click="$emit('close')"
             class="p-2 rounded-lg text-muted-foreground hover:text-foreground transition-colors"
           >
-            <font-awesome-icon icon="times" class="w-5 h-5" />
+            <Icon icon="times" class-name="w-5 h-5" fallback="" />
           </button>
         </div>
       </div>
@@ -134,7 +134,7 @@
               @click="updateStatus('cozinha')"
               class="flex-1 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
             >
-              <font-awesome-icon icon="check" class="w-4 h-4 mr-2" />
+              <Icon icon="check" class-name="w-4 h-4 mr-2" fallback="" />
               Aceitar Pedido
             </button>
           </template>
@@ -144,7 +144,7 @@
               @click="updateStatus(pedido.tipoEntrega === 'entrega' ? 'entrega' : 'concluido')"
               class="flex-1 bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
             >
-              <font-awesome-icon icon="utensils" class="w-4 h-4 mr-2" />
+              <Icon icon="utensils" class-name="w-4 h-4 mr-2" fallback="" />
               Marcar como Pronto
             </button>
           </template>
@@ -154,7 +154,7 @@
               @click="updateStatus('concluido')"
               class="flex-1 bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
             >
-              <font-awesome-icon icon="check-circle" class="w-4 h-4 mr-2" />
+              <Icon icon="check-circle" class-name="w-4 h-4 mr-2" fallback="" />
               Concluir Entrega
             </button>
           </template>
@@ -164,7 +164,7 @@
             @click="printPedido"
             class="px-4 py-2 bg-muted hover:bg-muted/80 text-foreground rounded-lg font-medium transition-colors"
           >
-            <font-awesome-icon icon="print" class="w-4 h-4 mr-2" />
+            <Icon icon="print" class-name="w-4 h-4 mr-2" fallback="" />
             Imprimir
           </button>
         </div>
@@ -478,3 +478,4 @@ onMounted(() => {
   })
 })
 </script>
+

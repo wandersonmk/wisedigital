@@ -5,22 +5,19 @@
     
     <!-- Conteúdo principal -->
     <div class="lg:ml-64 min-h-screen flex flex-col">
-      <!-- Header principal com título e botões de ação -->
-      <header class="bg-card border-b border-border px-6 py-4">
-        <div class="flex items-center justify-between">
-          <!-- Área esquerda com menu hambúrguer (mobile) e título -->
-          <div class="flex items-center space-x-4">
-            <!-- Menu Hambúrguer (só aparece no mobile) -->
-            <button 
-              @click="isMobileMenuOpen = true"
-              class="lg:hidden p-2 rounded-lg text-foreground/80 hover:text-foreground hover:bg-muted transition-colors"
-              title="Abrir menu"
-            >
-              <font-awesome-icon 
-                icon="bars" 
-                class="w-5 h-5" 
-              />
-            </button>
+        <!-- Header principal com título e botões de ação -->
+        <header class="bg-card border-b border-border px-6 py-4">
+          <div class="flex items-center justify-between">
+            <!-- Área esquerda com menu hambúrguer (mobile) e título -->
+            <div class="flex items-center space-x-4">
+              <!-- Menu Hambúrguer (só aparece no mobile) -->
+              <button 
+                @click="isMobileMenuOpen = true"
+                class="lg:hidden p-2 rounded-lg text-foreground/80 hover:text-foreground hover:bg-muted transition-colors"
+                title="Abrir menu"
+              >
+                <Icon icon="bars" class-name="w-5 h-5" fallback="☰" />
+              </button>
             
             <!-- Título -->
             <div>
@@ -34,13 +31,15 @@
             <!-- Botão Sair -->
             <button 
               @click="handleLogout"
-              class="p-2 rounded-lg text-foreground/70 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/10 transition-all duration-200 group"
+              class="flex items-center gap-2 px-3 py-2 rounded-lg text-foreground/70 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/10 transition-all duration-200 group"
               title="Sair"
             >
-              <font-awesome-icon 
-                icon="sign-out-alt" 
-                class="w-5 h-5 group-hover:scale-110 transition-transform duration-200" 
-              />
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 group-hover:scale-110 transition-transform duration-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                <polyline points="16 17 21 12 16 7"></polyline>
+                <line x1="21" y1="12" x2="9" y2="12"></line>
+              </svg>
+              <span class="hidden sm:inline text-sm font-medium">Sair</span>
             </button>
           </div>
         </div>
@@ -48,7 +47,7 @@
 
       <!-- Conteúdo da página -->
       <main class="p-6 flex-1">
-        <slot />
+        <NuxtPage />
       </main>
       
       <!-- Footer global -->
@@ -60,9 +59,6 @@
 <script setup lang="ts">
 // Estado do menu mobile
 const isMobileMenuOpen = ref(false)
-
-// Composables para autenticação
-// const { signOut } = useAuth() // Temporariamente comentado
 
 // Título dinâmico baseado na rota
 const route = useRoute()

@@ -13,7 +13,7 @@
               <p class="text-xs text-blue-600 mt-1">até agora</p>
             </div>
             <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center shadow-lg">
-              <font-awesome-icon :icon="['fas', 'ticket']" class="text-white text-2xl drop-shadow-lg" />
+              <Icon :icon="['fas', 'ticket']" class-name="text-white text-2xl drop-shadow-lg" fallback="" />
             </div>
           </div>
         </div>
@@ -47,7 +47,7 @@
               <p class="text-xs text-green-600 mt-1">este mês</p>
             </div>
             <div class="w-12 h-12 bg-gradient-to-br from-amber-500 to-amber-600 rounded-lg flex items-center justify-center shadow-lg">
-              <font-awesome-icon :icon="['fas', 'ticket']" class="text-white text-2xl" />
+              <Icon :icon="['fas', 'ticket']" class-name="text-white text-2xl" fallback="" />
             </div>
           </div>
         </div>
@@ -63,7 +63,7 @@
               <p class="text-xs text-indigo-600 mt-1">total de clientes</p>
             </div>
             <div class="w-12 h-12 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-lg flex items-center justify-center shadow-lg">
-              <font-awesome-icon :icon="['fas', 'users']" class="text-white text-2xl" />
+              <Icon :icon="['fas', 'users']" class-name="text-white text-2xl" fallback="" />
             </div>
           </div>
         </div>
@@ -306,3 +306,4 @@ async function createLineChart() {
 // ...existing code...
 
 </script>
+

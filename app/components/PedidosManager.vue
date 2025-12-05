@@ -495,3 +495,4 @@ const getPaymentLabel = (payment: string) => {
   return labels[payment as keyof typeof labels] || payment
 }
 </script>
+

@@ -4,10 +4,7 @@
     <div class="flex items-center justify-between p-6 border-b border-border">
       <div class="flex items-center space-x-3">
         <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center">
-          <font-awesome-icon 
-            icon="question-circle" 
-            class="w-5 h-5 text-white" 
-          />
+          <Icon icon="question-circle" class-name="w-5 h-5 text-white" fallback="" />
         </div>
         <div>
           <h2 class="text-lg font-semibold text-foreground">Central de Ajuda</h2>
@@ -23,10 +20,7 @@
       <div class="space-y-4">
         <div class="flex items-center space-x-3 mb-4">
           <div class="w-8 h-8 bg-purple-100 dark:bg-purple-900/20 rounded-lg flex items-center justify-center">
-            <font-awesome-icon 
-              icon="filter" 
-              class="w-4 h-4 text-purple-600 dark:text-purple-400" 
-            />
+            <Icon icon="filter" class-name="w-4 h-4 text-purple-600 dark:text-purple-400" fallback="" />
           </div>
           <h3 class="text-xl font-semibold text-foreground">Como Usar os Filtros nos Relatórios</h3>
         </div>
@@ -72,10 +66,7 @@
       <div class="space-y-4">
         <div class="flex items-center space-x-3 mb-4">
           <div class="w-8 h-8 bg-green-100 dark:bg-green-900/20 rounded-lg flex items-center justify-center">
-            <font-awesome-icon 
-              icon="file-pdf" 
-              class="w-4 h-4 text-green-600 dark:text-green-400" 
-            />
+            <Icon icon="file-pdf" class-name="w-4 h-4 text-green-600 dark:text-green-400" fallback="" />
           </div>
           <h3 class="text-xl font-semibold text-foreground">Como Baixar Relatórios</h3>
         </div>
@@ -119,10 +110,7 @@
         <div class="space-y-4">
           <div class="flex items-center space-x-3 mb-4">
             <div class="w-8 h-8 bg-blue-100 dark:bg-blue-900/20 rounded-lg flex items-center justify-center">
-              <font-awesome-icon 
-                icon="bolt" 
-                class="w-4 h-4 text-blue-600 dark:text-blue-400" 
-              />
+              <Icon icon="bolt" class-name="w-4 h-4 text-blue-600 dark:text-blue-400" fallback="" />
             </div>
             <h3 class="text-xl font-semibold text-foreground">Novas Funcionalidades</h3>
           </div>
@@ -169,10 +157,7 @@
       <div class="space-y-4">
         <div class="flex items-center space-x-3 mb-4">
           <div class="w-8 h-8 bg-orange-100 dark:bg-orange-900/20 rounded-lg flex items-center justify-center">
-            <font-awesome-icon 
-              icon="cog" 
-              class="w-4 h-4 text-orange-600 dark:text-orange-400" 
-            />
+            <Icon icon="cog" class-name="w-4 h-4 text-orange-600 dark:text-orange-400" fallback="" />
           </div>
           <h3 class="text-xl font-semibold text-foreground">Para que Servem as Configurações</h3>
         </div>
@@ -216,10 +201,7 @@
       <div class="space-y-4">
         <div class="flex items-center space-x-3 mb-4">
           <div class="w-8 h-8 bg-red-100 dark:bg-red-900/20 rounded-lg flex items-center justify-center">
-            <font-awesome-icon 
-              icon="exclamation-triangle" 
-              class="w-4 h-4 text-red-600 dark:text-red-400" 
-            />
+            <Icon icon="exclamation-triangle" class-name="w-4 h-4 text-red-600 dark:text-red-400" fallback="" />
           </div>
           <h3 class="text-xl font-semibold text-foreground">Cuidados Importantes ao Limpar Dados</h3>
         </div>
@@ -272,3 +254,4 @@
 // Componente de ajuda - não requer lógica específica
 // Todas as informações são estáticas e informativas
 </script>
+
